@@ -4,5 +4,19 @@
 
 {% block content %}
 <p>Hello You have Logged in as {{ email }}</p>
+<form method="get" action="/search_page">
+    <button type="submit">Search Postings</button>
+</form>
+<form method="get" action="/manage_page">
+    <button type="submit">Management</button>
+</form>
+</form>
+<form method="get" action="/new_post">
+    <button type="submit">Post a new listing</button>
+</form>
+<form method="get" action="/subscriptions_page">
+    <button type="submit">Subscriptions</button>
+</form>
+
 
 {% endblock %}
