@@ -132,7 +132,7 @@ def view_post():
 def login():
     message = 'Please login to your account'
     if "email" in session:
-        return redirect(url_for("manage"))
+        return redirect(url_for("logged_in"))
 
     if request.method == "POST":
         email = request.form.get("email")
@@ -164,32 +164,6 @@ def logout():
     else:
         return render_template('index.html')
 
-<<<<<<< HEAD
-#Working on this , will update :- Yamini
-#@app.route("/manage", methods=["POST","GET"])
-#def manage():
-    user_data=[]
-    # when the page is loaded show current users data
-    #from user email we can query their reports and subscription
-    #if request.method =="GET":
-        #rep_email = records.find_one(session.get("email"))
-
-        #user_data.append()
-        # main default display
-
-        # previous lin display
-        # next display
-
-
-
-
-#end of code to run it
-if __name__ == "__main__":
-  app.run(debug=True)
-
-#testing
-=======
 
 if __name__ == "__main__":
     app.run(debug=True)
->>>>>>> main
