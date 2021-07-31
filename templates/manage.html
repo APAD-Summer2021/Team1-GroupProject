@@ -1,7 +1,32 @@
-{% extends "base.html" %}
-{% block title %}Manage Profile{% endblock %}
-
-{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>App</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/manage.css') }}">
+</head>
+<body>
+<nav class="navbar navbar-light" >
+  <a class="navbar-brand" href="/logged_in">PetHaven</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup" style = "margin-left: 90%">
+    <div class="navbar-nav">
+      <a class="nav-item nav-link active" href="/">Post <span class="sr-only">(current)</span></a>
+      <a class="nav-item nav-link" href="/view_post">View</a>
+      <a class="nav-item nav-link" href="">Create Theme</a>
+        <a class="nav-item nav-link" href="/search_page">Search</a>
+        <a class="nav-item nav-link" href="/logout">Logout</a>
+    </div>
+  </div>
+</nav>
 
 <p>{{user.name}}</p>
 <div>
@@ -10,38 +35,92 @@
 <br>
 <hr>
 <br>
-<div>
+<table>
+    <tr>
+        <td>
+            <a href="link">Previous</a>
+        </td>
+        <td style ="padding-left: 100px">
+            <img src="{{user.reports.img}}">
+        </td>
+        <td style="padding-left: 100px">
+            <p>
+                <label>Title:</label>
+                <input type="text" value="{{user.reports.title}}">
+            </p>
+            <p>
+                <label>DateTime:</label>
+                <input type="text" value="{{user.reports.date}}">
+            </p>
+            <p>
+                <label>Description:</label>
+                <input type="text" value="{{user.reports.desc}}">
+            </p>
+            <p>
+                <label>Togs:</label>
+                <input type="text" value="{{user.reports.tag}}">
+            </p>
+            <p>
+                <label>Theme:</label>
+                <input type="text" value="{{user.reports.theme}}">
+            </p>
+        </td>
+        <td style="padding-left: 200px">
+            <a href="">Next</a>
+        <br>
+        <br>
+        <br>
+
+        </td>
+    </tr>
+</table>
+<!--<div>
     <h2>Your Reports</h2>
-    <div>
+    <div style = "float: left; ">
         <a href="link">Previous</a>
     </div>
-    <div>
+    <div style = "float: left; margin-left: 05%">
         <img src="{{user.reports.img}}">
     </div>
-    <div>
-        <label>Title:</label>
-        <input type="text" value="{{user.reports.title}}">
-        <label>DateTime:</label>
-        <input type="text" value="{{user.reports.date}}">
-        <label>Description:</label>
-        <input type="text" value="{{user.reports.desc}}">
-        <label>Togs:</label>
-        <input type="text" value="{{user.reports.tag}}">
-        <label>Theme:</label>
-        <input type="text" value="{{user.reports.theme}}">
+    <div style = "float:right; margin-right:05%">
+        <ul>
+            <li>
+                <label>Title:</label>
+                <input type="text" value="{{user.reports.title}}">
+            </li>
+            <li>
+                <label>DateTime:</label>
+                <input type="text" value="{{user.reports.date}}">
+            </li>
+            <li>
+                <label>Description:</label>
+                <input type="text" value="{{user.reports.desc}}">
+            </li>
+            <li>
+                <label>Togs:</label>
+                <input type="text" value="{{user.reports.tag}}">
+            </li>
+            <li>
+                <label>Theme:</label>
+                <input type="text" value="{{user.reports.theme}}">
+            </li>
+        </ul>
     </div>
-    <div>
+    <div style = "float: right; ">
         <a href="">Next</a>
         <br>
         <br>
         <br>
         <a href="">Edit</a>
     </div>
-</div>
+</div>-->
 <br>
+<a style="margin-left: 90%" href="">Edit</a>
 <hr>
 <br>
-<div>
+<p>
+
+</p>
     <br>
     <h2>Subscriptions</h2>
     {% for sub in subs %}
@@ -51,4 +130,4 @@
 
     {% endfor %}
 </div>
-{% endblock %}
+</body>
