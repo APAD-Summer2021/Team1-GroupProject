@@ -123,7 +123,7 @@ def view_post():
 def login():
     message = 'Please login to your account'
     if "email" in session:
-        return redirect(url_for("logged_in"))
+        return redirect(url_for("manage"))
 
     if request.method == "POST":
         email = request.form.get("email")
@@ -162,6 +162,33 @@ def logout():
     else:
         return render_template('index.html')
 
+@app.route('/manage', methods=['GET'])
+def manage():
+    # TODO: Uncomment auth logic below!
+    #if "email" in session:
+    user = {"reports": {"title": "Test", "date": "Test Date", "desc": "Test Desc", "tag": "Test Tag", "theme:": "Test Theme", "img": "https://via.placeholder.com/350x350"}}
+    return render_template("manage.html", user = user)
+    #else:
+        #return redirect(url_for("login"))
 
+#Working on this , will update :- Yamini
+#@app.route("/manage", methods=["POST","GET"])
+#def manage():
+    user_data=[]
+    # when the page is loaded show current users data
+    #from user email we can query their reports and subscription
+    #if request.method =="GET":
+        #rep_email = records.find_one(session.get("email"))
+
+        #user_data.append()
+        # main default display
+
+        # previous lin display
+        # next display
+
+
+
+
+#end of code to run it
 if __name__ == "__main__":
-    app.run(debug=True)
+  app.run(debug=True)
