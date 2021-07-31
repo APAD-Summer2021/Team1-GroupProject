@@ -4,16 +4,38 @@
 <head>
     <meta charset="UTF-8">
     <title>App</title>
-    <a href="">Manage</a>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/new_post.css') }}">
+</head>
+<body>
+<nav class="navbar navbar-light" >
+  <a class="navbar-brand" href="/logged_in">PetHaven</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup" style = "margin-left: 90%">
+    <div class="navbar-nav">
+      <a class="nav-item nav-link active" href="/">Post <span class="sr-only">(current)</span></a>
+      <a class="nav-item nav-link" href="/view_post">View</a>
+      <a class="nav-item nav-link" href="">Create Theme</a>
+        <a class="nav-item nav-link" href="/search_page">Search</a>
+    </div>
+  </div>
+</nav>
+
+<!--<a href="">Manage</a>
     <a href="">Post</a>
     <a href="">View</a>
     <a href="">Create Theme</a>
-    <a href="">Search</a>
+    <a href="">Search</a>-->
     <p ALIGN=CENTER><b><big>Create Report</b></big></p>
-</head>
-<body>
 <hr width=”200″ align=”middle”>
-<form action="/post_action" method="POST" id="posting">
+<!--<form action="/post_action" method="POST" id="posting">
     <table ALIGN=CENTER>
 <thead>
 <tr>
@@ -50,6 +72,61 @@
     <p ALIGN=CENTER>Description:</p> <p ALIGN=CENTER><textarea name="description" rows="7" cols="60"></textarea></p>
 
 <p ALIGN=CENTER><button type="submit">Post</button></p>
-</form>
+</form>-->
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <form class="box" action="/post_action" method="POST" id="posting">
+                    <table >
+                        <thead>
+                            <tr>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+    <td><p> <label for="type">Select Type of Pet:</label>
+            <select name="type" id="type" form="posting">
+                <option value=”dog02”>Dog 0-2 Years</option>
+                <option value=”dog35”>Dog 3-5 Years</option>
+                <option value=”dog68”>Dog 6-8 Years</option>
+                <option value=”dog+”>Dog 8+ Years</option>
+                <option value=”cat”>Cat</option>
+                <option value=”bird”>Bird</option>
+                <option value=”fish”>Fish</option>
+                <option value=”horse”>Horse</option>
+                <option value=”rodent”>Rodent</option>
+                <option value=”reptile”>Reptile</option>
+                <option value=”other”>Other</option>
+        </select></p></td>
+    <td>Tags: <input type="text" name="tags" placeholder="Separate tags by comma" /></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Title: <input type ="text" name="title" placeholder="Title" /></td>
+    <td>Location: <input type="text" name="location" placeholder ="Please enter current location"></td>
+  </tr>
+  <tr>
+      <td>Image : <input  type = "file" name = "pet_image" multiple/></td>
+  </tr>
+</tbody>
+</table>
+                    <p>Description:</p> <p><textarea name="description" rows="7" cols="60"></textarea></p>
+
+<p><button type="submit">Post</button></p>
+                    <!--{% if message  %}
+                    <p class="text-muted"> {{ message }}</p>
+                    {% endif %}
+                    <input id="InputEmail" type="text" name="email" placeholder="Username">
+                    <input id="InputPassword" type="password" name="password" placeholder="Password">
+                    <a class="forgot text-muted" href="#">Forgot password?</a>
+                    <button type="submit">Submit</button>-->
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

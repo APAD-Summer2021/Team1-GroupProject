@@ -4,19 +4,20 @@
 
 {% block content %}
 
-<p style="text-align: center">Hello You have Logged in as {{ email }}</p>
-<form method="get" action="/search_page">
+<p style="text-align: center">Welcome {{ email }}</p>
+<form class="loogedin" method="get" action="/search_page">
     <button type="submit">Search Postings</button>
 </form>
-<form method="get" action="/manage">
+<form class="loogedin" method="get" action="/manage">
     <button type="submit">Management</button>
 </form>
 </form>
-<form method="get" action="/new_post">
+<form class = "loogedin" method="get" action="/new_post">
     <button type="submit">Post a new listing</button>
 </form>
-<form method="get" action="/subscriptions_page">
+<form class="loogedin" method="get" action="/subscriptions_page">
     <button type="submit">Subscriptions</button>
 </form>
+
 
 {% endblock %}

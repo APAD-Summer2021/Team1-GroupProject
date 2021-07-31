@@ -2,7 +2,8 @@ body {
     margin: 0;
     padding: 0;
     font-family: sans-serif;
-    background: linear-gradient(to right, #00a5bb,#aaaaaa);
+    background: linear-gradient(to right,#00a5bb,#aaaaaa);
+
 }
 
 .card {
@@ -12,29 +13,30 @@ body {
 
 .box {
     width: 500px;
-    padding: 40px;
+    padding: 30px;
     position: absolute;
     top: 50%;
     left: 50%;
-    background: #191919;
     border-radius: 10px;
+    alignment: center;
+    background: black;
     text-align: center;
     transition: 0.25s;
-    margin-top: 100px
+    margin-top: 50px
 }
 
-.box input[type="text"],
+.box input[type="text"],.box input[type="file"],.box textarea,.box select,
 .box input[type="password"] {
     border: 0;
     background: none;
     display: block;
     margin: 20px auto;
     text-align: center;
-    border: 2px solid #3498db;
+    border: 2px solid #2ecc71;
     padding: 10px 10px;
-    width: 250px;
+    width: 200px;
     outline: none;
-    color: white;
+    color: #2ecc71;
     border-radius: 24px;
     transition: 0.25s
 }
@@ -47,11 +49,11 @@ body {
 
 .box input[type="text"]:focus,
 .box input[type="password"]:focus {
-    width: 300px;
+    width: 100px;
     border-color: #2ecc71
 }
 
-.box button[type="submit"], .loogedin button[type="submit"] {
+.box button[type="submit"] {
     border: 0;
     background: none;
     display: block;
@@ -60,7 +62,7 @@ body {
     border: 2px solid #2ecc71;
     padding: 14px 40px;
     outline: none;
-    color: white;
+    color: #919191;
     border-radius: 24px;
     transition: 0.25s;
     cursor: pointer
@@ -73,10 +75,6 @@ body {
 .forgot {
     text-decoration: underline
 }
-.loogedin button[type="submit"]:hover {
-    background: #2ecc71
-}
-
-
-
+.box td, .box p {
+    color: grey;
 }
