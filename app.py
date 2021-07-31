@@ -90,6 +90,15 @@ def logout():
     else:
         return render_template('index.html')
 
+@app.route('/manage', methods=['GET'])
+def manage():
+    # TODO: Uncomment auth logic below!
+    #if "email" in session:
+    user = {"reports": {"title": "Test", "date": "Test Date", "desc": "Test Desc", "tag": "Test Tag", "theme:": "Test Theme", "img": "https://via.placeholder.com/350x350"}}
+    return render_template("manage.html", user = user)
+    #else:
+        #return redirect(url_for("login"))
+
 #Working on this , will update :- Yamini
 #@app.route("/manage", methods=["POST","GET"])
 #def manage():
