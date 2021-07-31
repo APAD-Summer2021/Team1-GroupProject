@@ -1,9 +1,7 @@
 import urllib
-
 from bson import ObjectId
 from flask import Flask, render_template, request, url_for, redirect, session
-import requests
-from requests_toolbelt.utils import dump
+from werkzeug.utils import secure_filename
 import pymongo
 import bcrypt
 from datetime import datetime
@@ -89,14 +87,13 @@ def post_action():
     # Adding a Post
     if "email" in session:
         user_id = session["email"]
-        # type_of_pet = request.values.get("type")
         type_of_pet = request.form.get("type")
         tags = request.values.get("tags")
         post_date = datetime.now()
         title = request.values.get("title")
         desc = request.values.get("description")
         location = request.values.get("location")
-        image = "dummy for now"
+        image = request.values.get('pet_image')
         post_response = postings.insert_one(
             {"user_id": user_id, "tags": tags, "date_posted": post_date, "detailed_description": desc,
              "post_title": title,
@@ -106,7 +103,6 @@ def post_action():
         print(post_id)
         session["post_id"] = post_id
         return redirect("/view_post")
-        # return redirect("/logged_in")
     else:
         return redirect(url_for("login"))
 
@@ -120,9 +116,6 @@ def view_post():
         document_posted = postings.find_one({"_id": ObjectId(post_id)})
         print(document_posted)
         print(type(document_posted))
-        # json_object = json.dumps(document_posted)
-        # print(type(json_object))
-        # return redirect("/logged_in")
         return render_template('view_post.html', title='View your post', document_posted=document_posted)
     else:
         return redirect(url_for("login"))
@@ -155,6 +148,13 @@ def login():
             return render_template('login.html', message=message)
     return render_template('login.html', message=message)
 
+@app.route("/timeline", methods=["POST"])
+def timeline():
+    if "email" in session:
+        session.pop("email", None)
+        return render_template("timeline.html")
+    else:
+        return render_template('login.html')
 
 @app.route("/logout", methods=["POST", "GET"])
 def logout():
