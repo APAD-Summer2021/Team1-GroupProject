@@ -3,7 +3,7 @@ from bson import ObjectId
 from flask import Flask, render_template, request, url_for, redirect, session
 import pymongo
 import bcrypt
-from datetime import datetime
+import datetime
 
 
 app = Flask(__name__)
@@ -87,15 +87,17 @@ def post_action():
         user_id = session["email"]
         type_of_pet = request.form.get("type")
         tags = request.values.get("tags")
-        post_date = datetime.now()
+        post_date = datetime.date.strftime(datetime.date.today(), "%m/%d/%Y")
+        print(post_date)
         title = request.values.get("title")
         desc = request.values.get("description")
         location = request.values.get("location")
         image = request.values.get('pet_image')
+        status = "Open"
         post_response = postings.insert_one(
             {"user_id": user_id, "tags": tags, "date_posted": post_date, "detailed_description": desc,
              "post_title": title,
-             "location": location, "image": image, "type": type_of_pet})
+             "location": location, "image": image, "type": type_of_pet, "status": status})
         print(str(post_response.inserted_id))
         post_id = str(post_response.inserted_id)
         print(post_id)
@@ -162,9 +164,17 @@ def logout():
     else:
         return render_template('index.html')
 
+@app.route("/view_all", methods=['GET', 'POST'])
+def view_all():
+    # Viewing all posts, show newest posts first
+    if "email" in session:
+        posts = postings.find().sort('date_posted',-1)
+        return render_template('all_posts.html', title='View posts', posts=posts)
+    else:
+        return redirect(url_for("login"))
+
 @app.route('/manage', methods=['GET'])
 def manage():
-    # TODO: Uncomment auth logic below!
     #if "email" in session:
     user = {"reports": {"title": "Test", "date": "Test Date", "desc": "Test Desc", "tag": "Test Tag", "theme:": "Test Theme", "img": "https://via.placeholder.com/350x350"}}
     return render_template("manage.html", user = user)
