@@ -1,11 +1,9 @@
 import urllib
 from bson import ObjectId
 from flask import Flask, render_template, request, url_for, redirect, session
-from werkzeug.utils import secure_filename
 import pymongo
 import bcrypt
 from datetime import datetime
-import json
 
 
 app = Flask(__name__)
