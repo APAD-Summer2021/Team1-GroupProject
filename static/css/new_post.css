@@ -18,7 +18,7 @@ body {
     top: 50%;
     left: 50%;
     border-radius: 10px;
-    alignment: center;
+    align-content: center;
     background: black;
     text-align: center;
     transition: 0.25s;
