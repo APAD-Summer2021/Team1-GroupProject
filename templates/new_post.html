@@ -1,7 +1,6 @@
-{% extends "base.html" %}
-{% block title %}Pet Haven Posts{% endblock %}
-
-{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
 <head>
     <meta charset="UTF-8">
     <title>App</title>
@@ -14,7 +13,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/new_post.css') }}">
 </head>
 <body>
-<nav class="navbar navbar-light" >
+  <nav class="navbar navbar-light" style="background:#A5D6D9">
   <a class="navbar-brand" href="/logged_in">PetHaven</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -22,7 +21,8 @@
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup" style = "margin-left: 90%">
     <div class="navbar-nav">
       <a class="nav-item nav-link active" href="/">Post <span class="sr-only">(current)</span></a>
-      <a class="nav-item nav-link" href="/view_post">View</a>
+      <a class="nav-item nav-link" href="/view_post">View your post</a>
+      <a class="nav-item nav-link" href="/view_all">View all Post</a>
       <a class="nav-item nav-link" href="">Create Theme</a>
         <a class="nav-item nav-link" href="/search_page">Search</a>
         <a class="nav-item nav-link" href="/logout">Logout</a>
@@ -31,7 +31,7 @@
 </nav>
 
     <p ALIGN=CENTER><b><big>Create Report</b></big></p>
-<hr width=”200″ align=”middle”>
+    <hr width=”200″ align=”middle”>
 
 <div class="container">
     <div class="row">
@@ -82,4 +82,4 @@
     </div>
 </div>
 </body>
-{% endblock %}
+
