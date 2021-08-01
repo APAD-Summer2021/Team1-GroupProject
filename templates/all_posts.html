@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Pet Haven Posts{% endblock %}
+
+{% block content %}
+
+<body>
+{% for post in posts %}
+<hr width=”200″ align=”middle”>
+              <table>
+<thead>
+</thead>
+<tbody>
+  <tr>
+    <td>Title:</td>
+    <td>{{post['post_title']}}</td>
+  </tr>
+
+  <tr>
+    <td>Category:</td>
+    <td>{{post['type']}}</td>
+  </tr>
+
+  <tr>
+    <td>Date:</td>
+    <td> {{post['date_posted']}}</td>
+  </tr>
+
+  <tr>
+    <td>Location:</td>
+    <td>{{post['location']}}</td>
+  </tr>
+
+  <tr>
+    <td>Description:</td>
+    <td>{{post['detailed_description']}}</td>
+  </tr>
+
+  <tr>
+    <td>Image:</td>
+    <td>{{post['image']}}</td>
+  </tr>
+
+  <tr>
+    <td>Tags:</td>
+    <td>{{post['tags']}}</td>
+  </tr>
+
+  <tr>
+    <td>Contact Information:</td>
+    <td>{{post['user_id']}}</td>
+  </tr>
+
+</tbody>
+</table>
+
+
+         {% endfor %}
+</body>
+{% endblock %}

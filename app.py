@@ -1,13 +1,9 @@
 import urllib
-
 from bson import ObjectId
 from flask import Flask, render_template, request, url_for, redirect, session
-import requests
-from requests_toolbelt.utils import dump
 import pymongo
 import bcrypt
-from datetime import datetime
-import json
+import datetime
 
 
 app = Flask(__name__)
@@ -89,24 +85,24 @@ def post_action():
     # Adding a Post
     if "email" in session:
         user_id = session["email"]
-        # type_of_pet = request.values.get("type")
         type_of_pet = request.form.get("type")
         tags = request.values.get("tags")
-        post_date = datetime.now()
+        post_date = datetime.date.strftime(datetime.date.today(), "%m/%d/%Y")
+        print(post_date)
         title = request.values.get("title")
         desc = request.values.get("description")
         location = request.values.get("location")
-        image = "dummy for now"
+        image = request.values.get('pet_image')
+        status = "Open"
         post_response = postings.insert_one(
             {"user_id": user_id, "tags": tags, "date_posted": post_date, "detailed_description": desc,
              "post_title": title,
-             "location": location, "image": image, "type": type_of_pet})
+             "location": location, "image": image, "type": type_of_pet, "status": status})
         print(str(post_response.inserted_id))
         post_id = str(post_response.inserted_id)
         print(post_id)
         session["post_id"] = post_id
         return redirect("/view_post")
-        # return redirect("/logged_in")
     else:
         return redirect(url_for("login"))
 
@@ -120,9 +116,6 @@ def view_post():
         document_posted = postings.find_one({"_id": ObjectId(post_id)})
         print(document_posted)
         print(type(document_posted))
-        # json_object = json.dumps(document_posted)
-        # print(type(json_object))
-        # return redirect("/logged_in")
         return render_template('view_post.html', title='View your post', document_posted=document_posted)
     else:
         return redirect(url_for("login"))
@@ -132,7 +125,7 @@ def view_post():
 def login():
     message = 'Please login to your account'
     if "email" in session:
-        return redirect(url_for("logged_in"))
+        return redirect(url_for("manage"))
 
     if request.method == "POST":
         email = request.form.get("email")
@@ -155,6 +148,13 @@ def login():
             return render_template('login.html', message=message)
     return render_template('login.html', message=message)
 
+@app.route("/timeline", methods=["POST"])
+def timeline():
+    if "email" in session:
+        session.pop("email", None)
+        return render_template("timeline.html")
+    else:
+        return render_template('login.html')
 
 @app.route("/logout", methods=["POST", "GET"])
 def logout():
@@ -164,6 +164,41 @@ def logout():
     else:
         return render_template('index.html')
 
+@app.route("/view_all", methods=['GET', 'POST'])
+def view_all():
+    # Viewing all posts, show newest posts first
+    if "email" in session:
+        posts = postings.find().sort('date_posted',-1)
+        return render_template('all_posts.html', title='View posts', posts=posts)
+    else:
+        return redirect(url_for("login"))
 
+@app.route('/manage', methods=['GET'])
+def manage():
+    #if "email" in session:
+    user = {"reports": {"title": "Test", "date": "Test Date", "desc": "Test Desc", "tag": "Test Tag", "theme:": "Test Theme", "img": "https://via.placeholder.com/350x350"}}
+    return render_template("manage.html", user = user)
+    #else:
+        #return redirect(url_for("login"))
+
+#Working on this , will update :- Yamini
+#@app.route("/manage", methods=["POST","GET"])
+#def manage():
+    user_data=[]
+    # when the page is loaded show current users data
+    #from user email we can query their reports and subscription
+    #if request.method =="GET":
+        #rep_email = records.find_one(session.get("email"))
+
+        #user_data.append()
+        # main default display
+
+        # previous lin display
+        # next display
+
+
+
+
+#end of code to run it
 if __name__ == "__main__":
-    app.run(debug=True)
+  app.run(debug=True)
