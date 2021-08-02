@@ -5,7 +5,6 @@ import pymongo
 import bcrypt
 import datetime
 
-
 app = Flask(__name__)
 app.secret_key = "testing"
 client = pymongo.MongoClient("mongodb+srv://MSITM_User:" +
@@ -14,13 +13,13 @@ client = pymongo.MongoClient("mongodb+srv://MSITM_User:" +
 db = client.get_database('APAD_Group1_DB')
 records = db.Login
 postings = db.Postings
-
+user_data = db.Userdata
 db = client.test
 
 
 @app.route("/", methods=['post', 'get'])
 def index():
-    message = ''
+    # message = ''
     if "email" in session:
         return redirect(url_for("logged_in"))
     if request.method == "POST":
@@ -44,11 +43,8 @@ def index():
         else:
             hashed = bcrypt.hashpw(password2.encode('utf-8'), bcrypt.gensalt())
             user_input = {'name': user, 'email': email, 'password': hashed}
-            try:
-                response = records.insert_one(user_input)
-                print(response.inserted_id)
-            except:
-                print("ERROR")
+            response = records.insert_one(user_input)
+            print(response.inserted_id)
 
             user_data = records.find_one({"email": email})
             new_email = user_data['email']
@@ -96,10 +92,11 @@ def post_action():
         status = "Open"
         post_response = postings.insert_one(
             {"user_id": user_id, "tags": tags, "date_posted": post_date, "detailed_description": desc,
-             "post_title": title,
-             "location": location, "image": image, "type": type_of_pet, "status": status})
+             "post_title": title, "location": location, "image": image, "type": type_of_pet, "status": status})
         print(str(post_response.inserted_id))
         post_id = str(post_response.inserted_id)
+        # insert document ID into User_data table
+        user_data.insert_one({"user_id": user_id, "posts": [post_id], })
         print(post_id)
         session["post_id"] = post_id
         return redirect("/view_post")
@@ -115,7 +112,7 @@ def view_post():
         post_id = session["post_id"]
         document_posted = postings.find_one({"_id": ObjectId(post_id)})
         print(document_posted)
-        print(type(document_posted))
+        # print(type(document_posted))
         return render_template('view_post.html', title='View your post', document_posted=document_posted)
     else:
         return redirect(url_for("login"))
@@ -148,13 +145,6 @@ def login():
             return render_template('login.html', message=message)
     return render_template('login.html', message=message)
 
-@app.route("/timeline", methods=["POST"])
-def timeline():
-    if "email" in session:
-        session.pop("email", None)
-        return render_template("timeline.html")
-    else:
-        return render_template('login.html')
 
 @app.route("/logout", methods=["POST", "GET"])
 def logout():
@@ -164,41 +154,80 @@ def logout():
     else:
         return render_template('index.html')
 
+
+@app.route('/sub', methods=['GET', 'POST'])
+def sub():
+    if "email" in session:
+        subscribed_tags = request.form.getlist('tags')
+        print(subscribed_tags)
+        message = "You have successfully subscribed to  - " + str(subscribed_tags)
+
+        db_dump = postings.find()
+        list_of_tags = []
+        for doc in db_dump:
+            # print(doc)
+            for tag_list in doc['tags'].split(','):
+                if tag_list not in list_of_tags:
+                    list_of_tags.append(tag_list)
+        # print(list_of_tags)
+        return render_template('sub.html', title='Subscribe', list_of_tags=list_of_tags, message=message)
+    else:
+        return redirect(url_for("login_in"))
+
+
+@app.route('/view_own_posts', methods=['GET', 'POST'])
+def view_own():
+    # Viewing all posts, show newest posts first
+    if "email" in session:
+        posts = postings.find({'user_id': session['email']}).sort('date_posted', -1)
+        return render_template('view_own_posts.html', title='View Own posts', posts=posts)
+    else:
+        return redirect(url_for("login"))
+
+
 @app.route("/view_all", methods=['GET', 'POST'])
 def view_all():
     # Viewing all posts, show newest posts first
     if "email" in session:
-        posts = postings.find().sort('date_posted',-1)
-        return render_template('all_posts.html', title='View posts', posts=posts)
+        list_of_posted_locations = []
+        locations = postings.find()
+        for loc in locations:
+            if loc['location'] not in list_of_posted_locations:
+                list_of_posted_locations.append(loc['location'])
+        print(list_of_posted_locations)
+        type_of_pet = request.form.get("type")
+        location = request.form.get("location")
+        print(type_of_pet, location)
+        if (type_of_pet is None or type_of_pet == 'all') and (location == 'all' or location is None):
+            posts = postings.find().sort('date_posted', -1)
+            return render_template('all_posts.html', title='View posts', posts=posts,
+                                   locations=list_of_posted_locations)
+        elif type_of_pet == 'all':
+            posts = postings.find({"location": location}).sort('date_posted', -1)
+        elif location == 'all':
+            posts = postings.find({"type": type_of_pet}).sort('date_posted', -1)
+        else:
+            posts = postings.find({"type": type_of_pet, 'location': location}).sort('date_posted', -1)
+        print("Display all the fetched posts")
+        print(posts)
+        for test in posts:
+            print("Items in result")
+            print(test['post_title'])
+        return render_template('all_posts.html', title='View posts', posts=posts, locations=list_of_posted_locations)
     else:
         return redirect(url_for("login"))
 
+
 @app.route('/manage', methods=['GET'])
 def manage():
-    #if "email" in session:
-    user = {"reports": {"title": "Test", "date": "Test Date", "desc": "Test Desc", "tag": "Test Tag", "theme:": "Test Theme", "img": "https://via.placeholder.com/350x350"}}
-    return render_template("manage.html", user = user)
-    #else:
-        #return redirect(url_for("login"))
-
-#Working on this , will update :- Yamini
-#@app.route("/manage", methods=["POST","GET"])
-#def manage():
-    user_data=[]
-    # when the page is loaded show current users data
-    #from user email we can query their reports and subscription
-    #if request.method =="GET":
-        #rep_email = records.find_one(session.get("email"))
-
-        #user_data.append()
-        # main default display
-
-        # previous lin display
-        # next display
+    if "email" in session:
+        user = {"reports": {"title": "Test", "date": "Test Date", "desc": "Test Desc", "tag": "Test Tag",
+                            "theme:": "Test Theme", "img": "https://via.placeholder.com/350x350"}}
+        return render_template("manage.html", user=user)
+    else:
+        return redirect(url_for("login"))
 
 
-
-
-#end of code to run it
+# end of code to run it
 if __name__ == "__main__":
-  app.run(debug=True)
+    app.run(debug=True)

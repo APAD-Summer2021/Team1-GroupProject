@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <title>PetHaven Subscriptions</title>
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/sub.css') }}">
+   </head>
+   <body>
+      <nav class="navbar navbar-light" style="background:#A5D6D9">
+         <a class="navbar-brand" href="/logged_in">PetHaven</a>
+         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+         <span class="navbar-toggler-icon"></span>
+         </button>
+         <div class="collapse navbar-collapse" id="navbarNavAltMarkup" style = "margin-left: 90%">
+            <div class="navbar-nav">
+               <a class="nav-item nav-link active" href="/">Post <span class="sr-only">(current)</span></a>
+               <a class="nav-item nav-link" href="/view_post">View your post</a>
+               <a class="nav-item nav-link" href="/view_all">View all Post</a>
+               <a class="nav-item nav-link" href="">Create Theme</a>
+               <a class="nav-item nav-link" href="/search_page">Search</a>
+               <a class="nav-item nav-link" href="/logout">Logout</a>
+            </div>
+         </div>
+      </nav>
+                     {% if message  %}
+                    <p class="text-muted" color="red"> {{ message }}</p>
+                    {% endif %}
+      <form method="POST" action="/sub" id="sub">
+    <fieldset>
+        <legend>Select all the tags you want to subscribe to below</legend>
+      {% for tag in list_of_tags %}
+        <input type="checkbox" name="tags" value="{{ tag }}">{{ tag }}<br>
+          {%  endfor  %}
+        <input type="submit" value="Subscribe now" />
+    </fieldset>
+</form>
+   </body>
+</html>
