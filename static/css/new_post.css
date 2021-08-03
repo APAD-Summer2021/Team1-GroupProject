@@ -2,8 +2,7 @@ body {
     margin: 0;
     padding: 0;
     font-family: sans-serif;
-    background: whitesmoke;
-
+    background: linear-gradient(to right, #25c481, #25b7c4);
 }
 
 .card {
@@ -11,6 +10,13 @@ body {
     border: none
 }
 
+.container {
+    max-width: 500px;
+    min-height: 700px;
+    max-height:900px;
+    padding: 16px;
+    background-color: black;
+  }
 .box {
     width: 500px;
     padding: 30px;
@@ -19,10 +25,10 @@ body {
     left: 50%;
     border-radius: 10px;
     align-content: center;
-    background: black;
     text-align: center;
     transition: 0.25s;
-    margin-top: 50px
+    margin-top: 50px;
+    margin:auto;
 }
 
 .box input[type="text"],.box input[type="file"],.box textarea,.box select,
@@ -42,7 +48,7 @@ body {
 }
 
 .box h1 {
-    color: white;
+    color: black;
     text-transform: uppercase;
     font-weight: 500
 }

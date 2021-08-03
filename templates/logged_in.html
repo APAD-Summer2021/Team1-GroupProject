@@ -2,19 +2,21 @@
 {% block title %}Youv'e logged in {% endblock %}
 
 {% block content %}
+<div class="container">
 
-<p style="text-align: center">Welcome {{ email }}</p>
-<form class="loogedin" method="get" action="/search_page">
+<H2 class=maintext style= "color:white"> Welcome {{ email }}</H2>
+<br>
+<form class="loogedin"  method="get" action="/search_page">
     <button type="submit">Search Postings</button>
 </form>
-<form class="loogedin" method="get" action="/manage">
+<form class="loogedin"  method="get" action="/manage">
     <button type="submit">Management</button>
 </form>
 </form>
 <form class = "loogedin" method="get" action="/new_post">
     <button type="submit">Post a new listing</button>
 </form>
-<form class="loogedin" method="get" action="/sub">
+<form class="loogedin"  method="get" action="/sub">
     <button type="submit">Subscriptions</button>
 </form>
 </form>
@@ -24,5 +26,7 @@
 <form class ="loogedin" method="get" action="/view_own_posts">
     <button type="submit">View My Posts</button>
 </form>
+
+</div>
 
 {% endblock %}

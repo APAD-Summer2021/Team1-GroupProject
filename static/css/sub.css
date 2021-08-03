@@ -1,3 +1,10 @@
+body{
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  background: linear-gradient(to right, #25c481, #25b7c4);
+
+}
 form.form-example {
     display: table;
 }
@@ -13,4 +20,7 @@ label, input {
 
 label {
     padding-right: 10px;
+}
+.checkbox{
+    align-content: center;
 }
