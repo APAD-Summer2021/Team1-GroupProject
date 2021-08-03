@@ -112,7 +112,6 @@ def view_post():
         post_id = session["post_id"]
         document_posted = postings.find_one({"_id": ObjectId(post_id)})
         print(document_posted)
-        # print(type(document_posted))
         return render_template('view_post.html', title='View your post', document_posted=document_posted)
     else:
         return redirect(url_for("login"))
@@ -158,26 +157,25 @@ def logout():
 @app.route('/sub', methods=['GET', 'POST'])
 def sub():
     if "email" in session:
-        subscribed_tags = request.form.getlist('tags')
-        print(subscribed_tags)
-        message = "You have successfully subscribed to  - " + str(subscribed_tags)
-
+        subscribed_themes = request.form.getlist('themes')
+        print(subscribed_themes)
+        if len(subscribed_themes) > 0:
+            message = "You have successfully subscribed to  - " + str(subscribed_themes)
+        else:
+            message = ""
         db_dump = postings.find()
-        list_of_tags = []
+        list_of_themes = []
         for doc in db_dump:
-            # print(doc)
-            for tag_list in doc['tags'].split(','):
-                if tag_list not in list_of_tags:
-                    list_of_tags.append(tag_list)
-        # print(list_of_tags)
-        return render_template('sub.html', title='Subscribe', list_of_tags=list_of_tags, message=message)
+            if doc['type'] not in list_of_themes:
+                list_of_themes.append(doc['type'])
+        return render_template('sub.html', title='Subscribe', list_of_themes=list_of_themes, message=message)
     else:
         return redirect(url_for("login_in"))
 
 
 @app.route('/view_own_posts', methods=['GET', 'POST'])
 def view_own():
-    # Viewing all posts, show newest posts first
+    # Viewing posts made by user, show newest posts first
     if "email" in session:
         posts = postings.find({'user_id': session['email']}).sort('date_posted', -1)
         return render_template('view_own_posts.html', title='View Own posts', posts=posts)
@@ -188,32 +186,15 @@ def view_own():
 @app.route("/view_all", methods=['GET', 'POST'])
 def view_all():
     # Viewing all posts, show newest posts first
+    type_of_pet = request.form.get('type')
+    print(type_of_pet)
     if "email" in session:
-        list_of_posted_locations = []
-        locations = postings.find()
-        for loc in locations:
-            if loc['location'] not in list_of_posted_locations:
-                list_of_posted_locations.append(loc['location'])
-        print(list_of_posted_locations)
-        type_of_pet = request.form.get("type")
-        location = request.form.get("location")
-        print(type_of_pet, location)
-        if (type_of_pet is None or type_of_pet == 'all') and (location == 'all' or location is None):
+        if type_of_pet is None or type_of_pet == 'all':
             posts = postings.find().sort('date_posted', -1)
-            return render_template('all_posts.html', title='View posts', posts=posts,
-                                   locations=list_of_posted_locations)
-        elif type_of_pet == 'all':
-            posts = postings.find({"location": location}).sort('date_posted', -1)
-        elif location == 'all':
-            posts = postings.find({"type": type_of_pet}).sort('date_posted', -1)
+            return render_template('all_posts.html', title='View posts', posts=posts)
         else:
-            posts = postings.find({"type": type_of_pet, 'location': location}).sort('date_posted', -1)
-        print("Display all the fetched posts")
-        print(posts)
-        for test in posts:
-            print("Items in result")
-            print(test['post_title'])
-        return render_template('all_posts.html', title='View posts', posts=posts, locations=list_of_posted_locations)
+            posts = postings.find({"type": type_of_pet}).sort('date_posted', -1)
+            return render_template('all_posts.html', title='View posts', posts=posts)
     else:
         return redirect(url_for("login"))
 

@@ -28,14 +28,14 @@
             </div>
          </div>
       </nav>
-                     {% if message  %}
-                    <p class="text-muted" color="red"> {{ message }}</p>
-                    {% endif %}
-      <form method="POST" action="/sub" id="sub">
+      {% if message  %}
+      <p class="text-muted" color="red"> {{ message }}</p>
+      {% endif %}
+      <form method="POST" action="/sub" id="sub" align ="center" >
     <fieldset>
         <legend>Select all the tags you want to subscribe to below</legend>
-      {% for tag in list_of_tags %}
-        <input type="checkbox" name="tags" value="{{ tag }}">{{ tag }}<br>
+      {% for theme in list_of_themes %}
+        <input type="checkbox" name="themes" value="{{ theme }}" align="left"> {{ theme }} <br>
           {%  endfor  %}
         <input type="submit" value="Subscribe now" />
     </fieldset>
