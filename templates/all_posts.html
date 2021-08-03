@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <title>PetHaven Posts</title>
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/all_post.css') }}">
+   </head>
+   <body>
+      <nav class="navbar navbar-light" style="background:#A5D6D9">
+         <a class="navbar-brand" href="/logged_in">PetHaven</a>
+         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+         <span class="navbar-toggler-icon"></span>
+         </button>
+         <div class="collapse navbar-collapse" id="navbarNavAltMarkup" style = "margin-left: 90%">
+            <div class="navbar-nav">
+               <a class="nav-item nav-link active" href="/">Post <span class="sr-only">(current)</span></a>
+               <a class="nav-item nav-link" href="/view_post">View your post</a>
+               <a class="nav-item nav-link" href="/view_all">View all Post</a>
+               <a class="nav-item nav-link" href="">Create Theme</a>
+               <a class="nav-item nav-link" href="/search_page">Search</a>
+               <a class="nav-item nav-link" href="/logout">Logout</a>
+            </div>
+         </div>
+      </nav>
+
+
+                      <form action="/view_all" method="POST" id="filter">
+                            <label for="filter">Select Type of Pet :</label>
+                            <select name="type" id="select_type">
+            <option value=all>All</option>
+            <option value=dog02>Dog 0-2 Years</option>
+            <option value=dog35>Dog 3-5 Years</option>
+            <option value=dog68>Dog 6-8 Years</option>
+            <option value=dog+>Dog 8+ Years</option>
+            <option value=cat>Cat</option>
+            <option value=bird>Bird</option>
+            <option value=fish>Fish</option>
+            <option value=horse>Horse</option>
+            <option value=rodent>Rodent</option>
+            <option value=reptile>Reptile</option>
+            <option value=other>Other</option>
+         </select>
+                            <label for="filter">Location :</label>
+                            <select name="location" id="select_location">
+                            <option value=all>All</option>
+                                {% for location in locations %}
+                            <option value="{{location}}">{{location}}</option>
+                                {% endfor %}
+                            </select>
+                            <p ALIGN=LEFT><button  type="submit">Filter Results</button></p>
+
+      <hr width=”500″ align=”middle”>
+      <h1 style="color:grey; text-align: center">Results</h1>
+
+
+
+                    {% for post in posts %}
+                    <div class="tbl-content">
+                        <table class="box2" cellpadding="0" cellspacing="0" border="0">
+                            <tbody>
+                                <tr>
+                                    <td>Title:</td>
+                                    <td>{{post['post_title']}}</td>
+                                </tr>
+                                <tr>
+                                        <td>Category:</td>
+                                        <td>{{post['type']}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Date:</td>
+                                    <td> {{post['date_posted']}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Location:</td>
+                                        <td>{{post['location']}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Description:</td>
+                                        <td>{{post['detailed_description']}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Image:</td>
+                                        <td>{{post['image']}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tags:</td>
+                                        <td>{{post['tags']}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Contact Information:</td>
+                                        <td>{{post['user_id']}}</td>
+                                    </tr>
+                                </tbody>
+                        </table>
+                    </div>
+      {% endfor %}
+
+   </body>
+</html>
