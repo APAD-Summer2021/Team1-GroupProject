@@ -1,11 +1,11 @@
 body {
     font-family: sans-serif;
-    background: linear-gradient(to right, #00a5bb,#aaaaaa);
-    color: grey;
+    background: black;
+    color: white;
 }
 
 a {
-    color: black;
+    color: white;
 }
 
 input[type="text"] {

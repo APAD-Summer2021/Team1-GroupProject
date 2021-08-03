@@ -1,4 +1,3 @@
-
 {% extends "base.html" %}
 {% block title %}Youv'e logged in {% endblock %}
 
@@ -15,16 +14,15 @@
 <form class = "loogedin" method="get" action="/new_post">
     <button type="submit">Post a new listing</button>
 </form>
-<form class="loogedin" method="get" action="/subscriptions_page">
+<form class="loogedin" method="get" action="/sub">
     <button type="submit">Subscriptions</button>
 </form>
 </form>
 <form class = "loogedin" method="get" action="/view_all">
     <button type="submit">View All Posts</button>
 </form>
-<form class ="loogedin" method="get" action="/view_post">
-    <button type="submit">View My Post</button>
+<form class ="loogedin" method="get" action="/view_own_posts">
+    <button type="submit">View My Posts</button>
 </form>
-
 
 {% endblock %}
