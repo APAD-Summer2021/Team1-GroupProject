@@ -8,7 +8,7 @@ body {
 
 .card {
     margin-bottom: 20px;
-    border: none
+    border: none;
 }
 
 .box {
@@ -22,7 +22,8 @@ body {
     background: black;
     text-align: center;
     transition: 0.25s;
-    margin-top: 50px
+    margin-top: 50px;
+    align-content:  ;
 }
 
 .box input[type="text"],.box input[type="file"],.box textarea,.box select,
