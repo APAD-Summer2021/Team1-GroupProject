@@ -162,14 +162,26 @@ def logout():
     else:
         return render_template('index.html')
 
-@app.route('/manage', methods=['GET'])
+
+@app.route('/manage',methods=['GET'])
 def manage():
-    # TODO: Uncomment auth logic below!
-    #if "email" in session:
-    user = {"reports": {"title": "Test", "date": "Test Date", "desc": "Test Desc", "tag": "Test Tag", "theme:": "Test Theme", "img": "https://via.placeholder.com/350x350"}}
-    return render_template("manage.html", user = user)
-    #else:
-        #return redirect(url_for("login"))
+    current_page = request.args.get('page', 1, type=int)
+    item_per_page = 1
+    user = []
+    if "email" in session:
+        user_id = session['email']
+        for x in postings.find({"user_id": user_id}):
+            user.append(x)
+        print(f'the data is user {user} end')
+    if user:
+        pages = round(len(user)/item_per_page+ .499)
+        from_page = int(pages) * item_per_page - item_per_page
+        upto_page = int(pages) * item_per_page
+        list_show = user[from_page:upto_page]
+        print(f' here is what we are sending {list_show} right')
+        return render_template('manage.html', users=list_show, pages=pages, current_page=current_page)
+
+
 
 #Working on this , will update :- Yamini
 #@app.route("/manage", methods=["POST","GET"])
