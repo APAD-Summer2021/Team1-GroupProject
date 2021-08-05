@@ -32,17 +32,14 @@
          <label for="filter">Select Type of Pet :</label>
          <select name="type" id="select_type">
             <option value=all>All</option>
-            <option value=dog02>Dog 0-2 Years</option>
-            <option value=dog35>Dog 3-5 Years</option>
-            <option value=dog68>Dog 6-8 Years</option>
-            <option value=dog+>Dog 8+ Years</option>
-            <option value=cat>Cat</option>
-            <option value=bird>Bird</option>
-            <option value=fish>Fish</option>
-            <option value=horse>Horse</option>
-            <option value=rodent>Rodent</option>
-            <option value=reptile>Reptile</option>
-            <option value=other>Other</option>
+            <option value=Dog>Dog 0-2 Years</option>
+            <option value=Cat>Cat</option>
+            <option value=Bird>Bird</option>
+            <option value=Fish>Fish</option>
+            <option value=Horse>Horse</option>
+            <option value=Rodent>Rodent</option>
+            <option value=Reptile>Reptile</option>
+            <option value=Other>Other</option>
          </select>
 <!--          <label for="filter">Location :</label>-->
 <!--         <select name="location" id="select_location">-->
@@ -82,8 +79,10 @@
                   <td>{{post['detailed_description']}}</td>
                </tr>
                <tr>
-                  <td>Image:</td>
-                  <td>{{post['image']}}</td>
+                   <td>Image:</td>
+                   <td><img alt="PostImage" height="400" src="data:image/png;base64, {{images[post['image_id']]}}"
+                           width="400"/></td>
+
                </tr>
                <tr>
                   <td>Tags:</td>
