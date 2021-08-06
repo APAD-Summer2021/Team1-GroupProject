@@ -21,9 +21,9 @@
          <div class="collapse navbar-collapse" id="navbarNavAltMarkup" style = "margin-left: 90%">
             <div class="navbar-nav">
                <a class="nav-item nav-link active" href="/">Post <span class="sr-only">(current)</span></a>
-               <a class="nav-item nav-link" href="/view_post">View your post</a>
+               <a class="nav-item nav-link" href="/view_own_posts">View your post</a>
                <a class="nav-item nav-link" href="/view_all">View all Post</a>
-               <a class="nav-item nav-link" href="">Create Theme</a>
+               <a class="nav-item nav-link" href="/create_theme">Create Theme</a>
                <a class="nav-item nav-link" href="/search_page">Search</a>
                <a class="nav-item nav-link" href="/logout">Logout</a>
             </div>
@@ -33,22 +33,11 @@
          <label for="filter">Select Type of Pet :</label>
          <select name="type" id="select_type">
             <option value=all>All</option>
-            <option value=Dog>Dog 0-2 Years</option>
-            <option value=Cat>Cat</option>
-            <option value=Bird>Bird</option>
-            <option value=Fish>Fish</option>
-            <option value=Horse>Horse</option>
-            <option value=Rodent>Rodent</option>
-            <option value=Reptile>Reptile</option>
+             {% for theme in list_of_themes %}
+            <option value="{{ theme }}">{{ theme }}</option>
+             {% endfor %}
             <option value=Other>Other</option>
          </select>
-<!--          <label for="filter">Location :</label>-->
-<!--         <select name="location" id="select_location">-->
-<!--             <option value=all>All</option>-->
-<!--             {% for location in locations %}-->
-<!--             <option value="{{location}}">{{location}}</option>-->
-<!--             {% endfor %}-->
-<!--         </select>-->
          <p ALIGN=LEFT><button type="submit">Filter Results</button></p>
       </form>
       <hr width=”500″ align=”middle”>

@@ -6,18 +6,42 @@ import bcrypt
 import datetime
 import gridfs
 import codecs
+import re
+import json
+from urllib.request import urlopen
+import googlemaps
+import certifi
+
 
 app = Flask(__name__)
 app.secret_key = "testing"
 client = pymongo.MongoClient("mongodb+srv://MSITM_User:" +
                              urllib.parse.quote_plus(
-                                     'admin@1234') + "@apadcluster.egsqq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+                                 'admin@1234') + "@apadcluster.egsqq.mongodb.net/myFirstDatabase?"
+                                                 "retryWrites=true&w=majority", tlsCAFile=certifi.where())
 db = client.get_database('APAD_Group1_DB')
 records = db.Login
 postings = db.Postings
 user_data = db.Userdata
 fs = gridfs.GridFS(db)
 db = client.test
+
+
+def get_location_details():
+    url = 'http://ipinfo.io/json'
+    response = urlopen(url)
+    data = json.load(response)
+    IP = data['ip']
+    org = data['org']
+    city = data['city']
+    country = data['country']
+    region = data['region']
+    for dat in data:
+        print(dat)
+
+    print('Your IP detail\n ')
+    print('IP : {4} \nRegion : {1} \nCountry : {2} \nCity : {3} \nOrg : {0} \nLocation: {5} \nPO: '
+          '{6}'.format(org, region, country, city, IP, data['loc'], data['postal']))
 
 
 # Create an object of GridFs for the above database.
@@ -180,8 +204,7 @@ def logout():
         return render_template('index.html')
 
 
-
-@app.route("/manage",methods=['GET'])
+@app.route("/manage", methods=['GET'])
 def manage():
     print('inside manage page')
     current_page = request.args.get('page', 1, type=int)
@@ -204,7 +227,7 @@ def manage():
             image = base64_data.decode('utf-8')
             images.update({post['image_id']: image})
         posts = postings.find().sort('date_posted', -1)
-        pages = round(len(user)/item_per_page+ .499)
+        pages = round(len(user) / item_per_page + .499)
         print(f'{pages} pages')
         from_page = int(current_page) * item_per_page - item_per_page
         upto_page = int(current_page) * item_per_page
@@ -218,9 +241,7 @@ def manage():
         return render_template('manage.html', users=list_show, pages=pages, current_page=current_page, images=images)
     else:
         flash(u'There are no posts created by you!', 'alert-danger')
-        return  render_template('logged_in.html', email=user_id)
-
-
+        return render_template('logged_in.html', email=user_id)
 
 
 @app.route('/sub', methods=['GET', 'POST'])
@@ -232,22 +253,45 @@ def sub():
             message = "You have successfully subscribed to  - " + str(subscribed_themes)
         else:
             message = ""
-        db_dump = postings.find()
+        post_dump = postings.find()
         list_of_themes = []
-        for doc in db_dump:
+        for doc in post_dump:
             if doc['type'] not in list_of_themes:
                 list_of_themes.append(doc['type'])
+        print(session['email'])
+        login_dump = records.find_one({'email': session['email']})
+        updated_subs = login_dump['subscriptions']
+        if login_dump['subscriptions']:
+            print("subscriptions exist")
+            for theme in subscribed_themes:
+                if theme not in updated_subs:
+                    updated_subs.append(theme)
+            response_update = records.update_one({'email': session['email']},
+                                                 {"$set": {"subscriptions": updated_subs}})
+        else:
+            response_update = records.update_one({'email': session['email']},
+                                                 {"$set": {"subscriptions": subscribed_themes}})
+        for record in records.find():
+            print(record)
         return render_template('sub.html', title='Subscribe', list_of_themes=list_of_themes, message=message)
     else:
         return redirect(url_for("login_in"))
 
 
 @app.route('/view_own_posts', methods=['GET', 'POST'])
-def view_own():
+def view_own_posts():
     # Viewing posts made by user, show newest posts first
     if "email" in session:
+        posts = postings.find().sort('date_posted', -1)
+        images = {}
+        for post in posts:
+            # print(post)
+            image = fs.get(post['image_id'])
+            base64_data = codecs.encode(image.read(), 'base64')
+            image = base64_data.decode('utf-8')
+            images.update({post['image_id']: image})
         posts = postings.find({'user_id': session['email']}).sort('date_posted', -1)
-        return render_template('view_own_posts.html', title='View Own posts', posts=posts)
+        return render_template('view_own_posts.html', title='View posts', posts=posts, images=images)
     else:
         return redirect(url_for("login"))
 
@@ -260,22 +304,24 @@ def view_all():
         if type_of_pet is None or type_of_pet == 'all':
             print(type_of_pet)
             posts = postings.find().sort('date_posted', -1)
-            #posts01 = list(posts)
+            # posts01 = list(posts)
             images = {}
+            list_of_themes = []
             for post in posts:
-                #print(post)
+                # print(post)
+                if post['type'] not in list_of_themes:
+                    list_of_themes.append(post['type'])
                 image = fs.get(post['image_id'])
                 base64_data = codecs.encode(image.read(), 'base64')
                 image = base64_data.decode('utf-8')
                 images.update({post['image_id']: image})
             posts = postings.find().sort('date_posted', -1)
-            return render_template('all_posts.html', title='View posts', posts=posts,images=images)
+            return render_template('all_posts.html', title='View posts', posts=posts, images=images, list_of_themes=list_of_themes)
         else:
             print(type_of_pet)
             posts = postings.find({"type": type_of_pet}).sort('date_posted', -1)
             images = {}
             for post in posts:
-
                 print(post)
                 image = fs.get(post['image_id'])
                 base64_data = codecs.encode(image.read(), 'base64')
@@ -287,9 +333,7 @@ def view_all():
         return redirect(url_for("login"))
 
 
-
-
-
 # end of code to run it
 if __name__ == "__main__":
+    get_location_details()
     app.run(debug=True)
