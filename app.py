@@ -194,7 +194,16 @@ def manage():
         for x in postings.find({"user_id": user_id}):
             user.append(x)
         print(f'the data is user {user} end')
+        print(user)
     if user:
+        images = {}
+        for post in user:
+            # print(post)
+            image = fs.get(post['image_id'])
+            base64_data = codecs.encode(image.read(), 'base64')
+            image = base64_data.decode('utf-8')
+            images.update({post['image_id']: image})
+        posts = postings.find().sort('date_posted', -1)
         pages = round(len(user)/item_per_page+ .499)
         print(f'{pages} pages')
         from_page = int(current_page) * item_per_page - item_per_page
@@ -205,7 +214,8 @@ def manage():
         subs_list_show = user[sub_from_page:sub_upto_page]
         print(f'{from_page} from_page , {upto_page} upto_page')
         print(f' here is what we are sending {list_show} right')
-        return render_template('manage.html', users=list_show, pages=pages, current_page=current_page)
+        print(images)
+        return render_template('manage.html', users=list_show, pages=pages, current_page=current_page, images=images)
     else:
         flash(u'There are no posts created by you!', 'alert-danger')
         return  render_template('logged_in.html', email=user_id)
