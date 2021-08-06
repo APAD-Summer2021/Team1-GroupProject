@@ -1,11 +1,11 @@
 body {
     font-family: sans-serif;
-    background: linear-gradient(to right, #00a5bb,#aaaaaa);
-    color: grey;
+    background: black;
+    color: white;
 }
 
 a {
-    color: black;
+    color: white;
 }
 
 
@@ -13,7 +13,7 @@ input[type="text"] {
     border: 0;
     background: none;
     display: block;
-    #margin: 20px auto;
+    margin: 20px auto;  
     text-align: center;
     border: 2px solid #3498db;
     padding: 5px 5px;

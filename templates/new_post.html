@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,7 +12,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/new_post.css') }}">
 </head>
 <body>
-<nav class="navbar navbar-light" >
+  <nav class="navbar navbar-light" style="background:#A5D6D9">
   <a class="navbar-brand" href="/logged_in">PetHaven</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -21,7 +20,8 @@
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup" style = "margin-left: 90%">
     <div class="navbar-nav">
       <a class="nav-item nav-link active" href="/">Post <span class="sr-only">(current)</span></a>
-      <a class="nav-item nav-link" href="/view_post">View</a>
+      <a class="nav-item nav-link" href="/view_post">View your post</a>
+      <a class="nav-item nav-link" href="/view_all">View all Post</a>
       <a class="nav-item nav-link" href="">Create Theme</a>
         <a class="nav-item nav-link" href="/search_page">Search</a>
         <a class="nav-item nav-link" href="/logout">Logout</a>
@@ -29,15 +29,16 @@
   </div>
 </nav>
 
-    <p ALIGN=CENTER><b><big>Create Report</b></big></p>
-<hr width=”200″ align=”middle”>
+    <p ALIGN=CENTER><b><big>Create a Post</b></big></p>
+    <hr width=”200″ align=”middle”>
 
 <div class="container">
     <div class="row">
         <div class="col-md-6">
             <div class="card">
 
-                <form class="box" action="/post_action" method="POST" id="posting">
+                <form class="box"  action="/post_action"  method="POST" enctype="multipart/form-data" id="posting">
+
                     <table >
                         <thead>
                             <tr>
@@ -45,33 +46,30 @@
                         </thead>
                         <tbody>
                             <tr>
-    <td><p> <label for="type">Select Type of Pet:</label>
-            <select name="type" id="type" form="posting">
-                <option value=”dog02”>Dog 0-2 Years</option>
-                <option value=”dog35”>Dog 3-5 Years</option>
-                <option value=”dog68”>Dog 6-8 Years</option>
-                <option value=”dog+”>Dog 8+ Years</option>
-                <option value=”cat”>Cat</option>
-                <option value=”bird”>Bird</option>
-                <option value=”fish”>Fish</option>
-                <option value=”horse”>Horse</option>
-                <option value=”rodent”>Rodent</option>
-                <option value=”reptile”>Reptile</option>
-                <option value=”other”>Other</option>
+    <td><p> <label for="type">Select Type of Pet</label>
+            <select name="type" id="type" form="posting" >
+                <option value=Dog>Dog</option>
+                <option value=Cat>Cat</option>
+                <option value=Bird>Bird</option>
+                <option value=Fish>Fish</option>
+                <option value=Horse>Horse</option>
+                <option value=Rodent>Rodent</option>
+                <option value=Reptile>Reptile</option>
+                <option value=Other>Other</option>
         </select></p></td>
-    <td>Tags: <input type="text" name="tags" placeholder="Separate tags by comma" /></td>
+    <td>Tags <input type="text" name="tags" placeholder="Separate tags by comma" /></td>
     <td></td>
   </tr>
   <tr>
-    <td>Title: <input type ="text" name="title" placeholder="Title" /></td>
-    <td>Location: <input type="text" name="location" placeholder ="Please enter current location"></td>
+    <td>Title <input type ="text" name="title" placeholder="Title" /></td>
+    <td>Location <input type="text" name="location" placeholder ="Please enter current location"></td>
   </tr>
   <tr>
-      <td>Image : <input  type = "file" name = "pet_image" multiple/></td>
+      <td>Image  <input    type = "file" name="file" accept="image/*" /></td>
   </tr>
 </tbody>
 </table>
-                    <p>Description:</p> <p><textarea name="description" rows="7" cols="60"></textarea></p>
+                    <p>Description</p> <p><textarea name="description" rows="7" cols="60"></textarea></p>
 
 <p><button type="submit">Post</button></p>
 
@@ -82,4 +80,3 @@
     </div>
 </div>
 </body>
-</html>

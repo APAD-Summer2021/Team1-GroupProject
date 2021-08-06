@@ -4,16 +4,42 @@
 {% block content %}
 
   <body>
-  <h3>{{document_posted['user_id']}}</h3>
-  <h3>{{document_posted['tags']}}</h3>
-  <h3>{{document_posted['date_posted']}}</h3>
-  <h3>{{document_posted['detailed_description']}}</h3>
-  <h3>{{document_posted['post_title']}}</h3>
-  <h3>{{document_posted['location']}}</h3>
-  <h3>{{document_posted['image']}}</h3>
-  <h3>{{document_posted['type']}}</h3>
-  </body>
-
-{% endblock %}
-
+  <img alt="PostImage" width="400" height="400" src="data:image/png;base64, {{image}}"/>
+  <table style="width:50%" align-content ="center">
+    <tr>
+      <td>Title:</td>
+      <td>{{document_posted['post_title']}}</td>
+    </tr>
+    <tr>
+      <td>Category:</td>
+      <td>{{document_posted['type']}}</td>
+    </tr>
+    <tr>
+      <td>Date:</td>
+      <td>{{document_posted['date_posted']}}</td>
+    </tr>
+    <tr>
+      <td>Location:</td>
+      <td>{{document_posted['location']}}</td>
+    </tr>
+    <tr>
+      <td>Image:</td>
+      <td>{{document_posted['image']}}</td>
+    </tr>
+    <tr>
+      <td>Description:</td>
+      <td>{{document_posted['detailed_description']}}</td>
+    </tr>
+    <tr>
+      <td>Tags:</td>
+      <td>{{document_posted['tags']}}</td>
+    </tr>
+  
+    <tr>
+      <td>Contact Information:</td>
+      <td>{{document_posted['user_id']}}</td>
+    </tr>
+    </table>
+    </body>
+    {% endblock %}
 
