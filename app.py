@@ -1,6 +1,6 @@
 import urllib
 from bson import ObjectId
-from flask import Flask, render_template, request, url_for, redirect, session
+from flask import Flask, render_template, request, url_for, redirect, session, flash
 import pymongo
 import bcrypt
 import datetime
@@ -11,7 +11,7 @@ app = Flask(__name__)
 app.secret_key = "testing"
 client = pymongo.MongoClient("mongodb+srv://MSITM_User:" +
                              urllib.parse.quote_plus(
-                                 'admin@1234') + "@apadcluster.egsqq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+                                     'admin@1234') + "@apadcluster.egsqq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 db = client.get_database('APAD_Group1_DB')
 records = db.Login
 postings = db.Postings
@@ -181,9 +181,11 @@ def logout():
 
 
 
-@app.route('/manage',methods=['GET'])
+@app.route("/manage",methods=['GET'])
 def manage():
+    print('inside manage page')
     current_page = request.args.get('page', 1, type=int)
+    print(f'{current_page} current_page')
     item_per_page = 1
     user = []
     if "email" in session:
@@ -193,11 +195,16 @@ def manage():
         print(f'the data is user {user} end')
     if user:
         pages = round(len(user)/item_per_page+ .499)
-        from_page = int(pages) * item_per_page - item_per_page
-        upto_page = int(pages) * item_per_page
+        print(f'{pages} pages')
+        from_page = int(current_page) * item_per_page - item_per_page
+        upto_page = int(current_page) * item_per_page
         list_show = user[from_page:upto_page]
+        print(f'{from_page} from_page , {upto_page} upto_page')
         print(f' here is what we are sending {list_show} right')
         return render_template('manage.html', users=list_show, pages=pages, current_page=current_page)
+    else:
+        flash(u'There are no posts created by you!', 'alert-danger')
+        return  render_template('logged_in.html', email=user_id)
 
 
 

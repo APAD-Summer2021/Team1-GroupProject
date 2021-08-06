@@ -1,7 +1,7 @@
 body {
     font-family: sans-serif;
-    background: black;
-    color: white;
+    background: linear-gradient(to right, #00a5bb,#aaaaaa);
+    color: darkblue;
 }
 
 a {
@@ -47,4 +47,12 @@ img {
   width: 200px;
   height: 200px;
 
+}
+.center {
+  border: 2px solid blue;
+  margin: auto;
+  position: relative;
+  text-align: center;
+  top: 50%;
+  width: 20%;
 }
