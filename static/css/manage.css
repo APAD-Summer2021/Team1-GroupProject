@@ -2,18 +2,20 @@ body {
     margin: 0;
     padding: 0;
     font-family: sans-serif;
-    background: linear-gradient(to right, #25c481, #25b7c4);
-  }
+    background: linear-gradient(to right, #00a5bb,#aaaaaa);
+    color: darkblue;
+}
 
 a {
     color: white;
 }
 
+
 input[type="text"] {
     border: 0;
     background: none;
     display: block;
-    margin: 20px auto;
+    margin: 20px auto;  
     text-align: center;
     border: 2px solid #3498db;
     padding: 5px 5px;
@@ -22,4 +24,37 @@ input[type="text"] {
     color: white;
     border-radius: 24px;
     transition: 0.25s
+}
+.card {
+  /* Add shadows to create the "card" effect */
+  box-shadow: 0 4px 4px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+    border-radius: 1px;
+}
+
+/* On mouse-over, add a deeper shadow */
+.card:hover {
+  box-shadow: 0 8px 8px 0 rgba(0,0,0,0.2);
+}
+
+/* Add some padding inside the card container */
+.container {
+  padding: 1px 1px;
+}
+img {
+  border-radius: 5px 5px 0 0;
+}
+.avatar {
+  vertical-align: middle;
+  width: 200px;
+  height: 200px;
+
+}
+.center {
+  border: 2px solid blue;
+  margin: auto;
+  position: relative;
+  text-align: center;
+  top: 50%;
+  width: 20%;
 }

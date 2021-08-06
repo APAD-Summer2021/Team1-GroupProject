@@ -29,14 +29,16 @@
   </div>
 </nav>
 
-    <p ALIGN=CENTER><b><big>Create a Post</b></big></p>
+    <p ALIGN=CENTER><b><big>Create a Post</big></b></p>
     <hr width=”200″ align=”middle”>
 
 <div class="container">
     <div class="row">
         <div class="col-md-6">
             <div class="card">
-                <form class="box" action="/post_action" method="POST" id="posting">
+
+                <form class="box"  action="/post_action"  method="POST" enctype="multipart/form-data" id="posting">
+
                     <table >
                         <thead>
                             <tr>
@@ -45,18 +47,15 @@
                         <tbody>
                             <tr>
     <td><p> <label for="type">Select Type of Pet</label>
-            <select name="type" id="type" form="posting">
-                <option value=dog02>Dog 0-2 Years</option>
-                <option value=dog35>Dog 3-5 Years</option>
-                <option value=dog68>Dog 6-8 Years</option>
-                <option value=dog+>Dog 8+ Years</option>
-                <option value=cat>Cat</option>
-                <option value=bird>Bird</option>
-                <option value=fish>Fish</option>
-                <option value=horse>Horse</option>
-                <option value=rodent>Rodent</option>
-                <option value=reptile>Reptile</option>
-                <option value=other>Other</option>
+            <select name="type" id="type" form="posting" >
+                <option value=Dog>Dog</option>
+                <option value=Cat>Cat</option>
+                <option value=Bird>Bird</option>
+                <option value=Fish>Fish</option>
+                <option value=Horse>Horse</option>
+                <option value=Rodent>Rodent</option>
+                <option value=Reptile>Reptile</option>
+                <option value=Other>Other</option>
         </select></p></td>
     <td>Tags <input type="text" name="tags" placeholder="Separate tags by comma" /></td>
     <td></td>
@@ -66,7 +65,7 @@
     <td>Location <input type="text" name="location" placeholder ="Please enter current location"></td>
   </tr>
   <tr>
-      <td>Image  <input  type = "file" name = "pet_image" multiple/></td>
+      <td>Image  <input    type = "file" name="file" accept="image/*" /></td>
   </tr>
 </tbody>
 </table>

@@ -1,20 +1,32 @@
 import urllib
 from bson import ObjectId
-from flask import Flask, render_template, request, url_for, redirect, session
+from flask import Flask, render_template, request, url_for, redirect, session, flash
 import pymongo
 import bcrypt
 import certifi
 import datetime
+import gridfs
+import codecs
 
 app = Flask(__name__)
 app.secret_key = "testing"
+<<<<<<< HEAD
 client = pymongo.MongoClient("mongodb+srv://MSITM_User:" + urllib.parse.quote_plus('admin@1234') + "@apadcluster.egsqq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority", tlsCAFile=certifi.where())
     
+=======
+client = pymongo.MongoClient("mongodb+srv://MSITM_User:" +
+                             urllib.parse.quote_plus(
+                                     'admin@1234') + "@apadcluster.egsqq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+>>>>>>> main
 db = client.get_database('APAD_Group1_DB')
 records = db.Login
 postings = db.Postings
 user_data = db.Userdata
+fs = gridfs.GridFS(db)
 db = client.test
+
+
+# Create an object of GridFs for the above database.
 
 
 @app.route("/", methods=['post', 'get'])
@@ -83,22 +95,37 @@ def post_action():
         user_id = session["email"]
         type_of_pet = request.form.get("type")
         tags = request.values.get("tags")
-        post_date = datetime.date.strftime(datetime.date.today(), "%m/%d/%Y")
-        print(post_date)
+        post_date = datetime.datetime.now().strftime("%m/%d/%Y %I:%M %p")
         title = request.values.get("title")
         desc = request.values.get("description")
         location = request.values.get("location")
-        image = request.values.get('pet_image')
+        # image = request.values.get('pet_image')
+        print(request.files)
+        if 'file' in request.files:
+            print('Here')
+            image = request.files["file"]
+            title = request.values.get('title')
+            img_id = fs.put(image, content_type=image.content_type, filename=title)
+
+        query = {
+            'id': img_id,
+            'title': request.form.get('title'),
+        }
+        # status = postings.insert_one(query)
         status = "Open"
         post_response = postings.insert_one(
             {"user_id": user_id, "tags": tags, "date_posted": post_date, "detailed_description": desc,
-             "post_title": title, "location": location, "image": image, "type": type_of_pet, "status": status})
+             "post_title": title, "location": location, "image_id": img_id, "type": type_of_pet, "status": status})
         print(str(post_response.inserted_id))
         post_id = str(post_response.inserted_id)
         # insert document ID into User_data table
         user_data.insert_one({"user_id": user_id, "posts": [post_id], })
         print(post_id)
         session["post_id"] = post_id
+        '''item = postings.find_one({'id': img_id})
+        image = fs.get(item['id'])
+        base64_data = codecs.encode(image.read(), 'base64')
+        image = base64_data.decode('utf-8')'''
         return redirect("/view_post")
     else:
         return redirect(url_for("login"))
@@ -111,9 +138,13 @@ def view_post():
         print(session["post_id"])
         post_id = session["post_id"]
         document_posted = postings.find_one({"_id": ObjectId(post_id)})
+        item = postings.find_one({'id': document_posted['image_id']})
         print(document_posted)
-        # print(type(document_posted))
-        return render_template('view_post.html', title='View your post', document_posted=document_posted)
+        image = fs.get(document_posted['image_id'])
+        base64_data = codecs.encode(image.read(), 'base64')
+        image = base64_data.decode('utf-8')
+
+        return render_template('view_post.html', title='View your post', document_posted=document_posted, image=image)
     else:
         return redirect(url_for("login"))
 
@@ -155,29 +186,61 @@ def logout():
         return render_template('index.html')
 
 
+
+@app.route("/manage",methods=['GET'])
+def manage():
+    print('inside manage page')
+    current_page = request.args.get('page', 1, type=int)
+    print(f'{current_page} current_page')
+    item_per_page = 1
+    subs_per_page = 3
+    user = []
+    if "email" in session:
+        user_id = session['email']
+        for x in postings.find({"user_id": user_id}):
+            user.append(x)
+        print(f'the data is user {user} end')
+    if user:
+        pages = round(len(user)/item_per_page+ .499)
+        print(f'{pages} pages')
+        from_page = int(current_page) * item_per_page - item_per_page
+        upto_page = int(current_page) * item_per_page
+        sub_from_page = int(current_page) * subs_per_page - subs_per_page
+        sub_upto_page = int(current_page) * sub_from_page - sub_from_page
+        list_show = user[from_page:upto_page]
+        subs_list_show = user[sub_from_page:sub_upto_page]
+        print(f'{from_page} from_page , {upto_page} upto_page')
+        print(f' here is what we are sending {list_show} right')
+        return render_template('manage.html', users=list_show, pages=pages, current_page=current_page)
+    else:
+        flash(u'There are no posts created by you!', 'alert-danger')
+        return  render_template('logged_in.html', email=user_id)
+
+
+
+
 @app.route('/sub', methods=['GET', 'POST'])
 def sub():
     if "email" in session:
-        subscribed_tags = request.form.getlist('tags')
-        print(subscribed_tags)
-        message = "You have successfully subscribed to  - " + str(subscribed_tags)
-
+        subscribed_themes = request.form.getlist('themes')
+        print(subscribed_themes)
+        if len(subscribed_themes) > 0:
+            message = "You have successfully subscribed to  - " + str(subscribed_themes)
+        else:
+            message = ""
         db_dump = postings.find()
-        list_of_tags = []
+        list_of_themes = []
         for doc in db_dump:
-            # print(doc)
-            for tag_list in doc['tags'].split(','):
-                if tag_list not in list_of_tags:
-                    list_of_tags.append(tag_list)
-        # print(list_of_tags)
-        return render_template('sub.html', title='Subscribe', list_of_tags=list_of_tags, message=message)
+            if doc['type'] not in list_of_themes:
+                list_of_themes.append(doc['type'])
+        return render_template('sub.html', title='Subscribe', list_of_themes=list_of_themes, message=message)
     else:
         return redirect(url_for("login_in"))
 
 
 @app.route('/view_own_posts', methods=['GET', 'POST'])
 def view_own():
-    # Viewing all posts, show newest posts first
+    # Viewing posts made by user, show newest posts first
     if "email" in session:
         posts = postings.find({'user_id': session['email']}).sort('date_posted', -1)
         return render_template('view_own_posts.html', title='View Own posts', posts=posts)
@@ -188,44 +251,39 @@ def view_own():
 @app.route("/view_all", methods=['GET', 'POST'])
 def view_all():
     # Viewing all posts, show newest posts first
+    type_of_pet = request.form.get('type')
     if "email" in session:
-        list_of_posted_locations = []
-        locations = postings.find()
-        for loc in locations:
-            if loc['location'] not in list_of_posted_locations:
-                list_of_posted_locations.append(loc['location'])
-        print(list_of_posted_locations)
-        type_of_pet = request.form.get("type")
-        location = request.form.get("location")
-        print(type_of_pet, location)
-        if (type_of_pet is None or type_of_pet == 'all') and (location == 'all' or location is None):
+        if type_of_pet is None or type_of_pet == 'all':
+            print(type_of_pet)
             posts = postings.find().sort('date_posted', -1)
-            return render_template('all_posts.html', title='View posts', posts=posts,
-                                   locations=list_of_posted_locations)
-        elif type_of_pet == 'all':
-            posts = postings.find({"location": location}).sort('date_posted', -1)
-        elif location == 'all':
-            posts = postings.find({"type": type_of_pet}).sort('date_posted', -1)
+            #posts01 = list(posts)
+            images = {}
+            for post in posts:
+                #print(post)
+                image = fs.get(post['image_id'])
+                base64_data = codecs.encode(image.read(), 'base64')
+                image = base64_data.decode('utf-8')
+                images.update({post['image_id']: image})
+            posts = postings.find().sort('date_posted', -1)
+            return render_template('all_posts.html', title='View posts', posts=posts,images=images)
         else:
-            posts = postings.find({"type": type_of_pet, 'location': location}).sort('date_posted', -1)
-        print("Display all the fetched posts")
-        print(posts)
-        for test in posts:
-            print("Items in result")
-            print(test['post_title'])
-        return render_template('all_posts.html', title='View posts', posts=posts, locations=list_of_posted_locations)
+            print(type_of_pet)
+            posts = postings.find({"type": type_of_pet}).sort('date_posted', -1)
+            images = {}
+            for post in posts:
+
+                print(post)
+                image = fs.get(post['image_id'])
+                base64_data = codecs.encode(image.read(), 'base64')
+                image = base64_data.decode('utf-8')
+                images.update({post['image_id']: image})
+            posts = postings.find({"type": type_of_pet}).sort('date_posted', -1)
+            return render_template('all_posts.html', title='View posts', posts=posts, images=images)
     else:
         return redirect(url_for("login"))
 
 
-@app.route('/manage', methods=['GET'])
-def manage():
-    if "email" in session:
-        user = {"reports": {"title": "Test", "date": "Test Date", "desc": "Test Desc", "tag": "Test Tag",
-                            "theme:": "Test Theme", "img": "https://via.placeholder.com/350x350"}}
-        return render_template("manage.html", user=user)
-    else:
-        return redirect(url_for("login"))
+
 
 
 # end of code to run it

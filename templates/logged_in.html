@@ -4,9 +4,23 @@
 {% block content %}
 <div class="container">
 
+<<<<<<< HEAD
 <H2 class=maintext style= "color:white"> Welcome {{ email }}</H2>
 <br>
 <form class="loogedin"  method="get" action="/search_page">
+=======
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %} 
+      <div class="alert alert-warning alert-dismissible"  role="alert">
+        {{message}}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+<p style="text-align: center">Welcome {{ email }}</p>
+<form class="loogedin" method="get" action="/search_page">
+>>>>>>> main
     <button type="submit">Search Postings</button>
 </form>
 <form class="loogedin"  method="get" action="/manage">
@@ -23,10 +37,12 @@
 <form class = "loogedin" method="get" action="/view_all">
     <button type="submit">View All Posts</button>
 </form>
-<form class ="loogedin" method="get" action="/view_own_posts">
+    <form class ="loogedin" method="get" action="/view_own_posts">
     <button type="submit">View My Posts</button>
 </form>
 
 </div>
 
 {% endblock %}
+
+
