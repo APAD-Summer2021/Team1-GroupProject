@@ -99,13 +99,11 @@
 
 <!--<a style="margin-left: 80%" href="">Edit</a>-->
 <hr>
-    <br>
-    <h2>Subscriptions</h2>
-    {% for sub in subs %}
-    <div>
-        <img src="">
-    </div>
+    <h3>Subscriptions :</h3>
+    {% for user in users %}
+<ul>
+    <li> {{user.type}}</li>
+</ul>
 
     {% endfor %}
-</div>
 </body>

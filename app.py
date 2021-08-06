@@ -187,6 +187,7 @@ def manage():
     current_page = request.args.get('page', 1, type=int)
     print(f'{current_page} current_page')
     item_per_page = 1
+    subs_per_page = 3
     user = []
     if "email" in session:
         user_id = session['email']
@@ -198,7 +199,10 @@ def manage():
         print(f'{pages} pages')
         from_page = int(current_page) * item_per_page - item_per_page
         upto_page = int(current_page) * item_per_page
+        sub_from_page = int(current_page) * subs_per_page - subs_per_page
+        sub_upto_page = int(current_page) * sub_from_page - sub_from_page
         list_show = user[from_page:upto_page]
+        subs_list_show = user[sub_from_page:sub_upto_page]
         print(f'{from_page} from_page , {upto_page} upto_page')
         print(f' here is what we are sending {list_show} right')
         return render_template('manage.html', users=list_show, pages=pages, current_page=current_page)
