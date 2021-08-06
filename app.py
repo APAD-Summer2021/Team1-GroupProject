@@ -202,10 +202,10 @@ def manage():
         sub_from_page = int(current_page) * subs_per_page - subs_per_page
         sub_upto_page = int(current_page) * sub_from_page - sub_from_page
         list_show = user[from_page:upto_page]
-        subs_list_show = user[sub_from_page:sub_upto_page]
+        subs_list_show = user
         print(f'{from_page} from_page , {upto_page} upto_page')
         print(f' here is what we are sending {list_show} right')
-        return render_template('manage.html', users=list_show, pages=pages, current_page=current_page)
+        return render_template('manage.html', users=list_show, subs=subs_list_show, pages=pages, current_page=current_page)
     else:
         flash(u'There are no posts created by you!', 'alert-danger')
         return  render_template('logged_in.html', email=user_id)

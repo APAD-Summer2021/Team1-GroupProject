@@ -1,13 +1,39 @@
 body {
     font-family: sans-serif;
-    background: linear-gradient(to right, #00a5bb,#aaaaaa);
+    background: #d9eff5;
     color: darkblue;
 }
-
+.col-md-3{
+  display: inline-block;
+  margin-left:-4px;
+}
+.col-md-3 img{
+  width:100%;
+  height:auto;
+}
+body .carousel-indicators li{
+  background-color:darkblue;
+}
+body .carousel-indicators{
+  bottom: 0;
+}
+body .carousel-control-prev-icon,
+body .carousel-control-next-icon{
+  background-color:darkblue;
+    margin-left: 0px ;
+}
+body .no-padding{
+  padding-left: 0;
+  padding-right: 0;
+   }
 a {
-    color: white;
+    color: grey;
+    font-weight: bold;
 }
 
+.line_it li {
+    display: inline;
+}
 
 input[type="text"] {
     border: 0;
@@ -22,6 +48,11 @@ input[type="text"] {
     color: white;
     border-radius: 24px;
     transition: 0.25s
+}
+p{
+    margin: 0px;
+    padding: 0px ;
+    text-align: -moz-left   ;
 }
 .card {
   /* Add shadows to create the "card" effect */
