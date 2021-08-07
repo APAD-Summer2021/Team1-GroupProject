@@ -1,0 +1,31 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    background-color:#deeaee;
+    color: white;
+   
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    
+  }
+  .box {
+    width: 600px;
+    height: 500px;
+    padding: 30px;
+    background: black;
+    border-radius: 15px;
+    text-align: center;
+    transition: 0.25s;
+    border: none;
+    margin-top: 0cm;
+    margin: 15px;
+}
+
+.navbar-brand{
+    font-size: x-large;
+}

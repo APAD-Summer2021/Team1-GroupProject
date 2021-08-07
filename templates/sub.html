@@ -28,17 +28,24 @@
             </div>
          </div>
       </nav>
+
+      <div class=container>
+      
+      <form class=box method="POST" action="/sub" id="sub" align ="center" >
+    <fieldset>
       {% if message  %}
       <p class="text-muted" color="red"> {{ message }}</p>
       {% endif %}
-      <form method="POST" action="/sub" id="sub" align ="center" >
-    <fieldset>
-        <legend>Select all the Themes you want to subscribe to below</legend>
+      
+        <legend>Select all the themes you want to subscribe</legend>
+        <div class =buttons>
       {% for theme in list_of_themes %}
-        <input type="checkbox" name="themes" value="{{ theme }}" align="left"> {{ theme }} <br>
+        <input type="checkbox" name="themes" value="{{ theme }}"> {{ theme }} <br>
           {%  endfor  %}
         <input type="submit" value="Subscribe now" />
+      </div>
     </fieldset>
-</form>
+      </form>
+   </div>
    </body>
 </html>
