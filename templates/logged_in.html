@@ -13,6 +13,8 @@
   {% endif %}
 {% endwith %}
 <p style="text-align: center">Welcome {{ email }}</p>
+<div class="login_box">
+
 <form class="loogedin" method="get" action="/search_page">
     <button type="submit">Search Postings</button>
 </form>
@@ -32,7 +34,9 @@
 </form>
     <form class ="loogedin" method="get" action="/view_own_posts">
     <button type="submit">View My Posts</button>
-</form>
+    </form>
+</div>
+
 
 {% endblock %}
 

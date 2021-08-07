@@ -2,13 +2,14 @@ body {
     margin: 0;
     padding: 0;
     font-family: sans-serif;
-    background: whitesmoke;
+    background: linear-gradient(to right, #25c481, #25b7c4) ;
 
 }
 
 .card {
     margin-bottom: 20px;
-    border: none
+    border: none;
+    margin-left: 40px;
 }
 
 .box {

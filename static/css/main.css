@@ -2,7 +2,7 @@ body {
     margin: 0;
     padding: 0;
     font-family: sans-serif;
-    background: black;
+    background: linear-gradient(to right, #25c481, #25b7c4) ;
 }
 
 .card {
@@ -72,6 +72,20 @@ body {
 
 .forgot {
     text-decoration: underline
+}
+.login_box{
+     width: 400px;
+    padding: 40px;
+    top: 50%;
+    left: 50%;
+    background: #191919;
+    margin-right: 50%;
+    margin-left: 550px;
+    border-radius: 10px;
+    text-align: center;
+    align-items: center;
+    transition: 0.25s;
+    margin-top: 50px
 }
 .loogedin button[type="submit"]:hover {
     background: #2ecc71
