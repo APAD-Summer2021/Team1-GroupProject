@@ -15,10 +15,7 @@ import certifi
 
 app = Flask(__name__)
 app.secret_key = "testing"
-client = pymongo.MongoClient("mongodb+srv://MSITM_User:" +
-                             urllib.parse.quote_plus(
-                                 'admin@1234') + "@apadcluster.egsqq.mongodb.net/myFirstDatabase?"
-                                                 "retryWrites=true&w=majority", tlsCAFile=certifi.where())
+client = pymongo.MongoClient("mongodb+srv://MSITM_User:" + urllib.parse.quote_plus('admin@1234') + "@apadcluster.egsqq.mongodb.net/myFirstDatabase?" "retryWrites=true&w=majority", tlsCAFile=certifi.where())
 db = client.get_database('APAD_Group1_DB')
 records = db.Login
 postings = db.Postings
