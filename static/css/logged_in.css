@@ -1,94 +1,69 @@
-@import "compass/css3";
-
-
-$icon-size: 3em;
-
-
-*, *:after, *:before {
-  box-sizing: border-box;
-}
-
-$brands: (
-  twitter: #00acee \f099,
-  facebook: #3b5998 \f09a,
-  pinterest: #cb2027 \f0d2,
-  youtube: #b00 \f167,
-  soundcloud: #FF5700 \f1be
-);
-
-
-.fa {
-  height: 2em;
-  font-size: $icon-size;
-  overflow: hidden;
-  margin: 0.5em;
-  position: relative;
-  text-decoration: none;
-  width: 2em;
-  -webkit-backface-visibility: hidden;
-
-
-  &:before, &:after {
-    left: 0;
-    position: absolute;
-    text-align: center;
-    transition: 0.5s;
-    top: 50%;
-    width: 100%;
-  }
-
-  &:before {
-    color: white;
-    transform: translate3D(0, -50%, 0);
-    z-index: 2;
-  }
-
-  &:after {
-    padding-bottom: 25%;
-    padding-top: 300%;
-    top: 0;
-  }
-
-  &:hover {
-    &:after {
-     transform: translate3D(0, -73%, 0);
-    }
-    &:before {
-      transform: translate3D(0, -250%, 0);
-    }
-  }
-}
-
-
-@each $brand, $properties in $brands {
-  $color: nth($properties, 1);
-  $icon: nth($properties, 2);
-
-  .fa-#{$brand} {
-
-    &:after {
-      background-image: linear-gradient($color 25%, white 75%);
-      content: '#{$icon}';
-      color: $color;
-    }
-
-  }
-
-}
-
-
-// Demo styles
-
-
-html {
-  background: radial-gradient(#222, #000);
-  height: 100%;
-  text-align: center;
-}
-
 body {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  background-color:#deeaee;
+  text-align: center; 
+
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+}
+.navbar-brand{
+  font-size: x-large;
+}
+.card {
+  max-height:1000px;
+  border: none;
+  width: 500px;
+  height: 700px;
+  padding: 30px;
+  background: #191919;
+  border-radius: 15px;
+  text-align: center;
+  transition: 0.25s;
+  margin-top: 0cm;
+
+}
+
+
+.box h1 {
+  color: white;
+  text-transform: uppercase;
+  font-weight: 500
+}
+
+.box input[type="text"]:focus,
+.box input[type="password"]:focus {
+  width: 300px;
+  border-color: #2ecc71
+}
+
+.box button[type="submit"], .loogedin button[type="submit"] {
+  border: 0;
+  background: none;
+  display: block;
+  margin: 15px auto;
+  text-align: center;
+  border: 2px solid #2ecc71;
+  padding: 14px 40px;
+  outline: none;
+  color: white;
+  border-radius: 24px;
+  transition: 0.25s;
+  cursor: pointer
+}
+
+.box button[type="submit"]:hover {
+  background: #2ecc71
+}
+
+.forgot {
+  text-decoration: underline
+}
+.loogedin button[type="submit"]:hover {
+  background: #2ecc71
 }

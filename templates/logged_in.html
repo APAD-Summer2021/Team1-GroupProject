@@ -1,7 +1,47 @@
-{% extends "base.html" %}
-{% block title %}Youv'e logged in {% endblock %}
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8">
 
-{% block content %}
+
+  <title>you've loggedin</title>
+
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/logged_in.css') }}">
+
+
+
+</head>
+<body>
+
+
+
+<nav class="navbar navbar-light" style="background:#A5D6D9">
+  <a class="navbar-brand" href="/logged_in">PetHaven</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup" style = "margin-left: 90%">
+    <div class="navbar-nav">
+      <a class="nav-item nav-link active" href="/">Post <span class="sr-only">(current)</span></a>
+      <a class="nav-item nav-link" href="/view_post">View your post</a>
+      <a class="nav-item nav-link" href="/view_all">View all Post</a>
+      <a class="nav-item nav-link" href="/search_page">Search</a>
+      <a class="nav-item nav-link" href="/logout">Logout</a>
+    </div>
+  </div>
+</nav>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+
 
 {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
@@ -12,28 +52,37 @@
     {% endfor %}
   {% endif %}
 {% endwith %}
-<p style="text-align: center">Welcome {{ email }}</p>
-<form class="loogedin" method="get" action="/search_page">
-    <button type="submit">Search Postings</button>
-</form>
-<form class="loogedin" method="get" action="/manage">
-    <button type="submit">Management</button>
-</form>
-</form>
-<form class = "loogedin" method="get" action="/new_post">
-    <button type="submit">Post a new listing</button>
-</form>
-<form class="loogedin" method="get" action="/sub">
-    <button type="submit">Subscriptions</button>
-</form>
-</form>
-<form class = "loogedin" method="get" action="/view_all">
-    <button type="submit">View All Posts</button>
-</form>
-    <form class ="loogedin" method="get" action="/view_own_posts">
-    <button type="submit">View My Posts</button>
-</form>
-
-{% endblock %}
 
 
+<div class="container">
+  <div class="row">
+      <div class="col-md-6">
+        <div class = "card">
+          <h2 style="color:white;" >Welcome {{ email }}</h2>
+          <form class="loogedin" method="get" action="/search_page">
+              <button type="submit">Search Postings</button>
+          </form>
+          <form class="loogedin" method="get" action="/manage">
+              <button type="submit">Management</button>
+          </form>
+          </form>
+          <form class = "loogedin" method="get" action="/new_post">
+              <button type="submit">Post a new listing</button>
+          </form>
+          <form class="loogedin" method="get" action="/sub">
+              <button type="submit">Subscriptions</button>
+          </form>
+          </form>
+          <form class = "loogedin" method="get" action="/view_all">
+              <button type="submit">View All Posts</button>
+          </form>
+              <form class ="loogedin" method="get" action="/view_own_posts">
+              <button type="submit">View My Posts</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

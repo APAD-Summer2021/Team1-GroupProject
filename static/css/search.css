@@ -820,7 +820,9 @@ legend {
   padding: 15px;
   font-family: 'Lato', sans-serif;
 }
-
+.navbar-brand{
+  font-size: x-large;
+}
 .s010 form {
   width: 100%;
   max-width: 790px;
