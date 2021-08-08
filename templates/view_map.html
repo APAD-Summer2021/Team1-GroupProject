@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset="UTF-8">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/gmap.css') }}">
+   </head>
+  <body>
+  <script>
+        let flaskData = {{data | tojson | safe}};
+        let map;
+        let lls = flaskData.latlongvalues;
+        function initMap() {
+          map = new google.maps.Map(document.getElementById("map"), {
+            center: { lat: 30.3093, lng: -97.7242},
+            zoom: 12,
+          });
+        function addMarker(location){
+                const marker = new google.maps.Marker({
+                position:location,
+                map: map,
+                icon:"static/image/longhorn_kKf_icon.ico"
+                });
+
+                marker.addListener("mouseover", () => {
+                    detailerWindow.open(map,marker);
+                    })
+        }
+        for(var i = 0;i<lls.length;i++){
+                var loc = { lat: lls[i]['lat'], lng: lls[i]['lng']}
+                addMarker(loc)
+        }
+    }
+  </script>
+  <nav class="navbar navbar-light" style="background:#A5D6D9">
+         <a class="navbar-brand" href="/logged_in">PetHaven</a>
+         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+         <span class="navbar-toggler-icon"></span>
+         </button>
+         <div class="collapse navbar-collapse" id="navbarNavAltMarkup" style = "margin-left: 90%">
+            <div class="navbar-nav">
+               <a class="nav-item nav-link active" href="/">Post <span class="sr-only">(current)</span></a>
+               <a class="nav-item nav-link" href="/view_own_posts">View your post</a>
+               <a class="nav-item nav-link" href="/view_all">View all Post</a>
+               <a class="nav-item nav-link" href="/create_theme">Create Theme</a>
+               <a class="nav-item nav-link" href="/search_page">Search</a>
+               <a class="nav-item nav-link" href="/logout">Logout</a>
+            </div>
+         </div>
+      </nav>
+          <script src="/declare.js"></script>
+
+    <div id="map"></div>
+        <script
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDN7PBqfHZG5S3RE2_R7ECzeRVokiLS9BA&callback=initMap"></script>
+        </body>
+</html>
