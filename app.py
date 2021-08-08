@@ -11,11 +11,18 @@ import json
 from urllib.request import urlopen
 import googlemaps
 import certifi
-
+import requests
+import sys
 
 app = Flask(__name__)
 app.secret_key = "testing"
-client = pymongo.MongoClient("mongodb+srv://MSITM_User:" + urllib.parse.quote_plus('admin@1234') + "@apadcluster.egsqq.mongodb.net/myFirstDatabase?" "retryWrites=true&w=majority", tlsCAFile=certifi.where())
+
+client = pymongo.MongoClient("mongodb+srv://MSITM_User:" +
+                             urllib.parse.quote_plus(
+                                 'admin@1234') + "@apadcluster.egsqq.mongodb.net/myFirstDatabase?"
+                                                 "retryWrites=true&w=majority", tlsCAFile=certifi.where())
+AUTH_KEY = "AIzaSyDN7PBqfHZG5S3RE2_R7ECzeRVokiLS9BA"
+
 db = client.get_database('APAD_Group1_DB')
 records = db.Login
 postings = db.Postings
@@ -24,7 +31,19 @@ fs = gridfs.GridFS(db)
 db = client.test
 
 
-def get_location_details():
+def generate_latlong_from_address(address):
+    base_url = "https://maps.googleapis.com/maps/api/geocode/json?"
+    params = {"address": address,
+              "key": AUTH_KEY}
+    # print(f"{base_url}{urllib.parse.urlencode(params)}")
+    r = requests.get(f"{base_url}{urllib.parse.urlencode(params)}")
+    data = json.loads(r.content)
+    latlong = data.get("results")[0].get("geometry").get("location")
+    print(latlong)
+    return latlong
+
+
+def get_details_from_ip():
     url = 'http://ipinfo.io/json'
     response = urlopen(url)
     data = json.load(response)
@@ -334,7 +353,8 @@ def view_all():
                 image = base64_data.decode('utf-8')
                 images.update({post['image_id']: image})
             posts = postings.find().sort('date_posted', -1)
-            return render_template('all_posts.html', title='View posts', posts=posts, images=images, list_of_themes=list_of_themes)
+            return render_template('all_posts.html', title='View posts', posts=posts, images=images,
+                                   list_of_themes=list_of_themes)
         else:
             print(type_of_pet)
             posts = postings.find({"type": type_of_pet}).sort('date_posted', -1)
@@ -351,7 +371,43 @@ def view_all():
         return redirect(url_for("login"))
 
 
+@app.route("/view_map", methods=['GET', 'POST'])
+def view_map():
+    # Viewing Ad posted by user on submit
+    if "email" in session:
+        list_of_latlong, list_of_titles, list_of_description, list_of_user_id, list_of_status, list_of_themes, list_of_address = [], [], [], [], [], [], []
+        posts = postings.find()
+        images = {}
+        for post in posts:
+            # print(post['location'])
+            list_of_latlong.append(generate_latlong_from_address(post['location']))
+            list_of_titles.append(post['post_title'])
+            list_of_description.append(post['detailed_description'])
+            list_of_user_id.append(post['user_id'])
+            list_of_status.append(post['status'])
+            list_of_themes.append(post['type'])
+            list_of_address.append(post['location'])
+            image = fs.get(post['image_id'])
+            base64_data = codecs.encode(image.read(), 'base64')
+            image = base64_data.decode('utf-8')
+            images.update({post['image_id']: image})
+
+        data = {
+            'latlongvalues': list_of_latlong,
+            'title_values': list_of_titles,
+            'description_values': list_of_description,
+            'user_id_values': list_of_user_id,
+            'status_values': list_of_status,
+            'theme_values': list_of_themes,
+            'address_values': list_of_address
+        }
+        # print(data)
+        return render_template('view_map.html', title='View Posts on the Map', data=data, images=images, posts=posts)
+    else:
+        return redirect(url_for("login"))
+
+
 # end of code to run it
 if __name__ == "__main__":
-    get_location_details()
+    get_details_from_ip()
     app.run(debug=True)
