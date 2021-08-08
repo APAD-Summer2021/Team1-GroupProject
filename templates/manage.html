@@ -57,27 +57,27 @@
                     </h4>
 
                     <p>{% if user.post_title %}
-                        Title: "{{user.post_title}}"
+                        Title: {{user.post_title}}
                     {% endif %}
                     </p>
                     <p>
                         {% if user.date_posted %}
-                        Date: "{{user.date_posted}}"
+                        Date: {{user.date_posted}}
                         {% endif %}
                     </p>
                     <p>
                         {% if user.detailed_description %}
-                        Desc: "{{user.detailed_description}}"
+                        Desc: {{user.detailed_description}}
                         {% endif %}
                     </p>
                     <p>
                         {% if user.tags %}
-                        Tags: "{{user.tags}}"
+                        Tags: {{user.tags}}
                         {% endif %}
                     </p>
                     <p>
                         {% if user.type %}
-                        Theme: "{{user.type}}"
+                        Theme: {{user.type}}
                         {% endif %}
                     </p>
                 </div>
@@ -97,6 +97,7 @@
         </td>
     </tr>
 </table>
+<a href="{{url_for('manage',page = current_page, delete=True ) }}">Delete</a>
 
 <!--<a style="margin-left: 80%" href="">Edit</a>-->
 <hr>
