@@ -369,6 +369,12 @@ def view_all():
             return render_template('all_posts.html', title='View posts', posts=posts, images=images,
                                    list_of_themes=list_of_themes)
         else:
+            list_of_themes =[]
+            posts = postings.find().sort('date_posted', -1)
+            for post in posts:
+                # print(post)
+                if post['type'] not in list_of_themes:
+                    list_of_themes.append(post['type'])          
             print(type_of_pet)
             posts = postings.find({"type": type_of_pet}).sort('date_posted', -1)
             images = {}
@@ -379,7 +385,7 @@ def view_all():
                 image = base64_data.decode('utf-8')
                 images.update({post['image_id']: image})
             posts = postings.find({"type": type_of_pet}).sort('date_posted', -1)
-            return render_template('all_posts.html', title='View posts', posts=posts, images=images)
+            return render_template('all_posts.html', title='View posts', posts=posts, images=images, list_of_themes=list_of_themes)
     else:
         return redirect(url_for("login"))
 
