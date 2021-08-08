@@ -106,13 +106,34 @@ def logged_in():
         return redirect(url_for("login"))
 
 
-@app.route('/search_page')
+@app.route('/search_page', methods=["POST", "GET"])
 def search_page():
     if "email" in session:
         email = session["email"]
-        return render_template('search_page.html', email=email)
+        search = request.form.get('search')
+        query = {
+            "tags": {
+                "$regex": search,
+                "$options": 'i'  # case-insensitive
+            }
+        }
+        if "email" in session:
+            if search is None or search == '':
+                return render_template('search_page.html', email=email)
+            else:
+                posts = list(postings.find({"tags" : {"$regex" : search}}))
+                images = {}
+                for post in posts:
+                    #print(post)
+                    image = fs.get(post['image_id'])
+                    base64_data = codecs.encode(image.read(), 'base64')
+                    image = base64_data.decode('utf-8')
+                    images.update({post['image_id']: image})
+                return render_template('search_page.html', email=email,posts=posts,images=images)
+
     else:
         return redirect(url_for("login"))
+
 
 
 @app.route("/new_post")
