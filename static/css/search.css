@@ -816,7 +816,7 @@ legend {
       justify-content: center;
   -ms-flex-align: center;
       align-items: center;
-  background: #d9eff5;
+  background: linear-gradient(to right, #25c481, #25b7c4);
   padding: 15px;
   font-family: 'Lato', sans-serif;
 }

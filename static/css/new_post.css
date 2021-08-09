@@ -10,7 +10,8 @@ body {
 }
 .card {
     margin-bottom: 20px;
-    border: none
+    border: none;
+    margin-left: 40px;
 }
 
 .box {

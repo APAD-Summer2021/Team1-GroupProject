@@ -10,6 +10,20 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/manage.css') }}">
+
+    <script type="text/javascript">
+        $(window).load(function() {
+            $(".carousel .item").each(function() {
+                var i = $(this).next();
+                i.length || (i = $(this).siblings(":first")),
+                  i.children(":first-child").clone().appendTo($(this));
+
+                for (var n = 0; n < 2; n++)(i = i.next()).length ||
+                  (i = $(this).siblings(":first")),
+                  i.children(":first-child").clone().appendTo($(this))
+            })
+        });
+    </script>
 </head>
 <body>
 <nav class="navbar navbar-light" style="background:#A5D6D9">
@@ -102,10 +116,61 @@
 <!--<a style="margin-left: 80%" href="">Edit</a>-->
 <hr>
     <h3>Subscriptions :</h3>
-    {% for user in users %}
-<ul>
-    <li> {{user.type}}</li>
-</ul>
 
+<div id="demo" class="carousel slide" data-ride="carousel">
+
+  <!-- Indicators
+  <ul class="carousel-indicators">
+      {% for sub in subs %}
+    <li data-target="#demo" data-slide-to={{loop.count}} class="{% if loop.count==1 %} active {% endif %}"></li>
+      {% endfor %}
+  </ul>-->
+
+  <!-- The slideshow -->
+  <div class="carousel-inner">
+
+      <div class="carousel-item active">
+          {% for sub in subs %}
+      {% if loop.index <= 3 %}
+          <div class="col-xs-3 col-sm-3 col-md-3">
+              <div class = "card" style ="width : 300px; background: white; margin-left: 250px; " >
+                <img src="{{ url_for('static', filename='image/birds.jpg') }}"  alt="Los Angeles" width="1100" height="500">
+                {{sub.type}}
+                  <a href="#">Unsubscribe</a>
+              </div>
+          </div>
+          {% endif %}
     {% endfor %}
+
+    </div>
+
+      <div class="carousel-item ">
+          {% for sub in subs %}
+      {% if loop.index >= 3 %}
+          <div class="col-xs-3 col-sm-3 col-md-3">
+              <div class = "card" style ="width : 300px; background: white; margin-left: 250px; " >
+                <img src="{{ url_for('static', filename='image/birds.jpg') }}"  alt="Los Angeles" width="1100" height="500">
+                {{sub.type}}
+              </div>
+          </div>
+          {% endif %}
+    {% endfor %}
+    </div>
+
+
+
+  </div>
+
+  <!-- Left and right controls-->
+  <a class="carousel-control-prev" href="#demo" data-slide="prev">
+    <span class="carousel-control-prev-icon"></span>
+  </a>
+  <a class="carousel-control-next" href="#demo" data-slide="next">
+    <span class="carousel-control-next-icon"></span>
+  </a>
+</div>
+
+
+
 </body>
+

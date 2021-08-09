@@ -283,10 +283,12 @@ def manage():
             postings.remove(ObjectId(curr_id))
             fs.delete(curr_img_id)
             return redirect(url_for("manage"))
-        subs_list_show = user[sub_from_page:sub_upto_page]
+
+
+        subs_list_show = user
         print(f'{from_page} from_page , {upto_page} upto_page')
         print(f' here is what we are sending {list_show} right')
-        return render_template('manage.html', users=list_show, pages=pages, current_page=current_page, images=images)
+        return render_template('manage.html', users=list_show, subs=subs_list_show, pages=pages, current_page=current_page, images=images)
     else:
         flash(u'There are no posts created by you!', 'alert-danger')
         return render_template('logged_in.html', email=user_id)
