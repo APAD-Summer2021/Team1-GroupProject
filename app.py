@@ -182,7 +182,7 @@ def post_action():
         image = fs.get(item['id'])
         base64_data = codecs.encode(image.read(), 'base64')
         image = base64_data.decode('utf-8')'''
-        return redirect("/view_post")
+        return redirect("/manage")
     else:
         return redirect(url_for("login"))
 
@@ -246,7 +246,8 @@ def logout():
 def manage():
     # print('inside manage page')
     current_page = request.args.get('page', 1, type=int)
-    # print(f'{current_page} current_page')
+    delete = request.args.get('delete')
+    print(f'{current_page} current_page')
     item_per_page = 1
     subs_per_page = 3
     user = []
@@ -254,8 +255,9 @@ def manage():
         user_id = session['email']
         for x in postings.find({"user_id": user_id}):
             user.append(x)
-        # print(f'the data is user {user} end')
-        # print(user)
+        print(f'the data is user {user} end')
+        print(user)
+        user.reverse()
     if user:
         images = {}
         for post in user:
@@ -264,7 +266,7 @@ def manage():
             base64_data = codecs.encode(image.read(), 'base64')
             image = base64_data.decode('utf-8')
             images.update({post['image_id']: image})
-        posts = postings.find().sort('date_posted', -1)
+        posts = postings.find().sort('date_posted')
         pages = round(len(user) / item_per_page + .499)
         # print(f'{pages} pages')
         from_page = int(current_page) * item_per_page - item_per_page
@@ -272,10 +274,18 @@ def manage():
         sub_from_page = int(current_page) * subs_per_page - subs_per_page
         sub_upto_page = int(current_page) * sub_from_page - sub_from_page
         list_show = user[from_page:upto_page]
+        curr_id = (list_show[0]['_id'])
+        curr_img_id = (list_show[0]['image_id'])
+        if delete == 'True':
+            print("Ready to delete", curr_id, curr_img_id)
+            delpost = postings.find_one(ObjectId(curr_id))
+            print(delpost)
+            postings.remove(ObjectId(curr_id))
+            fs.delete(curr_img_id)
+            return redirect(url_for("manage"))
         subs_list_show = user[sub_from_page:sub_upto_page]
-        # print(f'{from_page} from_page , {upto_page} upto_page')
-        # print(f' here is what we are sending {list_show} right')
-        # print(images)
+        print(f'{from_page} from_page , {upto_page} upto_page')
+        print(f' here is what we are sending {list_show} right')
         return render_template('manage.html', users=list_show, pages=pages, current_page=current_page, images=images)
     else:
         flash(u'There are no posts created by you!', 'alert-danger')
@@ -298,8 +308,11 @@ def sub():
                 list_of_themes.append(doc['type'])
         print(session['email'])
         login_dump = records.find_one({'email': session['email']})
-        if login_dump['subscriptions']:
+        if 'subscriptions' in login_dump.keys():
             updated_subs = login_dump['subscriptions']
+        else:
+            updated_subs = []
+        if 'subscriptions' in login_dump.keys():
             print("subscriptions exist")
             for theme in subscribed_themes:
                 if theme not in updated_subs:
@@ -357,6 +370,12 @@ def view_all():
             return render_template('all_posts.html', title='View posts', posts=posts, images=images,
                                    list_of_themes=list_of_themes)
         else:
+            list_of_themes =[]
+            posts = postings.find().sort('date_posted', -1)
+            for post in posts:
+                # print(post)
+                if post['type'] not in list_of_themes:
+                    list_of_themes.append(post['type'])          
             print(type_of_pet)
             posts = postings.find({"type": type_of_pet}).sort('date_posted', -1)
             images = {}
@@ -367,7 +386,7 @@ def view_all():
                 image = base64_data.decode('utf-8')
                 images.update({post['image_id']: image})
             posts = postings.find({"type": type_of_pet}).sort('date_posted', -1)
-            return render_template('all_posts.html', title='View posts', posts=posts, images=images)
+            return render_template('all_posts.html', title='View posts', posts=posts, images=images, list_of_themes=list_of_themes)
     else:
         return redirect(url_for("login"))
 
