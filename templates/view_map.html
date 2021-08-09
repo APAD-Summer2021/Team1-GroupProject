@@ -13,30 +13,92 @@
    </head>
   <body>
   <script>
-        let flaskData = {{data | tojson | safe}};
-        let map;
-        let lls = flaskData.latlongvalues;
-        function initMap() {
-          map = new google.maps.Map(document.getElementById("map"), {
-            center: { lat: 30.3093, lng: -97.7242},
-            zoom: 12,
-          });
-        function addMarker(location){
-                const marker = new google.maps.Marker({
-                position:location,
-                map: map,
-                icon:"static/image/longhorn_kKf_icon.ico"
-                });
+let flaskData = {{data | tojson | safe}};
+let map;
+let lls = flaskData.latlongvalues;
+let tvs = flaskData.title_values;
+let dvs = flaskData.description_values;
+let uvs = flaskData.user_id_values;
+let svs = flaskData.status_values;
+let thvs = flaskData.theme_values;
+let advs = flaskData.address_values;
+let imgvs = flaskData.image_values;
 
-                marker.addListener("mouseover", () => {
-                    detailerWindow.open(map,marker);
-                    })
-        }
-        for(var i = 0;i<lls.length;i++){
-                var loc = { lat: lls[i]['lat'], lng: lls[i]['lng']}
-                addMarker(loc)
-        }
-    }
+function initMap() {
+  const center_loc = {lat: 30.3093, lng: -97.7242};
+  const map = new google.maps.Map(document.getElementById("map"), {
+    zoom: 13,
+    center: center_loc,
+  });
+
+  function addMarker(location,title,description,status,user_id,address,image){
+        const contentString =
+        '<div class="info-window">' +
+        '<table>'+
+            '<tr>'+
+        '<td style="padding-left: 0px">'+
+        '<div class = "card" style ="width : 500px; background: white; margin-left: 0px; " >'+
+        '<div class = "container">'+
+        '<h3> ' + title +' </h3><br>'+
+        '<h4> Status : ' + status +'</h4><br>'+
+        '<h4> Location : ' + address +'</h4><br>'+
+        '<a href="mailto:'+ user_id +'"><h4>Send Email</h4></a>' +
+        '<p>' + description +'</p><br>' +
+        '</td></tr></table>'+
+        '<img alt="PostImage" height="500" src="data:image/png;base64, '+ image +'" width="500"/>'+
+        "</div>"+
+        "</div>"+
+        '</div>';
+
+        const infowindow = new google.maps.InfoWindow({
+        content: contentString,
+        });
+
+        const marker = new google.maps.Marker({
+        position: location,
+        map,
+        icon: "static/image/longhorn_kKf_icon.ico",
+        title: title,
+    });
+
+        marker.addListener("mouseover", () => {
+        infowindow.open({
+            anchor: marker,
+            map,
+            shouldFocus: false,
+        });
+    });
+  }
+  addMarker()
+  for (var i = 0; i < lls.length; i++) {
+                var location = {
+                    lat: lls[i]['lat'],
+                    lng: lls[i]['lng']
+                }
+                var title = tvs[i];
+                var description = dvs[i];
+                var user_id = uvs[i];
+                var status = svs[i];
+                var theme = thvs[i];
+                var address = advs[i];
+                var image = imgvs[i];
+
+                property = {
+                    location: location,
+                    title: title,
+                    description: description,
+                    user_id: user_id,
+                    status: status,
+                    theme: theme,
+                    address: address,
+                    image : image
+                }
+<!--                console.log(property.location)-->
+                addMarker(property.location,property.title,property.description,property.status,property.user_id,property.address, property.image)
+  }
+
+
+}
   </script>
   <nav class="navbar navbar-light" style="background:#A5D6D9">
          <a class="navbar-brand" href="/logged_in">PetHaven</a>
@@ -54,10 +116,12 @@
             </div>
          </div>
       </nav>
-          <script src="/declare.js"></script>
 
     <div id="map"></div>
         <script
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDN7PBqfHZG5S3RE2_R7ECzeRVokiLS9BA&callback=initMap"></script>
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDN7PBqfHZG5S3RE2_R7ECzeRVokiLS9BA&callback=initMap&libraries=&v=weekly&channel=2"
+      async>
+
+        </script>
         </body>
 </html>

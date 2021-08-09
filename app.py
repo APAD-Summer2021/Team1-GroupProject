@@ -39,7 +39,7 @@ def generate_latlong_from_address(address):
     r = requests.get(f"{base_url}{urllib.parse.urlencode(params)}")
     data = json.loads(r.content)
     latlong = data.get("results")[0].get("geometry").get("location")
-    print(latlong)
+    # print(latlong)
     return latlong
 
 
@@ -52,12 +52,14 @@ def get_details_from_ip():
     city = data['city']
     country = data['country']
     region = data['region']
-    for dat in data:
-        print(dat)
+    # for dat in data:
+    #     print(dat)
 
     print('Your IP detail\n ')
     print('IP : {4} \nRegion : {1} \nCountry : {2} \nCity : {3} \nOrg : {0} \nLocation: {5} \nPO: '
           '{6}'.format(org, region, country, city, IP, data['loc'], data['postal']))
+    curr_loc = data['loc']
+    return curr_loc
 
 
 # Create an object of GridFs for the above database.
@@ -112,7 +114,7 @@ def logged_in():
 def search_page():
     if "email" in session:
         email = session["email"]
-        search = request.form.get('search')
+        search = request.form.get('search').lower()
         query = {
             "tags": {
                 "$regex": search,
@@ -123,19 +125,18 @@ def search_page():
             if search is None or search == '':
                 return render_template('search_page.html', email=email)
             else:
-                posts = list(postings.find({"tags" : {"$regex" : search}}))
+                posts = list(postings.find({"tags": {"$regex": search}}))
                 images = {}
                 for post in posts:
-                    #print(post)
+                    # print(post)
                     image = fs.get(post['image_id'])
                     base64_data = codecs.encode(image.read(), 'base64')
                     image = base64_data.decode('utf-8')
                     images.update({post['image_id']: image})
-                return render_template('search_page.html', email=email,posts=posts,images=images)
+                return render_template('search_page.html', email=email, posts=posts, images=images)
 
     else:
         return redirect(url_for("login"))
-
 
 
 @app.route("/new_post")
@@ -149,7 +150,7 @@ def post_action():
     if "email" in session:
         user_id = session["email"]
         type_of_pet = request.form.get("type")
-        tags = request.values.get("tags")
+        tags = request.values.get("tags").lower()
         post_date = datetime.datetime.now().strftime("%m/%d/%Y %I:%M %p")
         title = request.values.get("title")
         desc = request.values.get("description")
@@ -243,9 +244,9 @@ def logout():
 
 @app.route("/manage", methods=['GET'])
 def manage():
-    print('inside manage page')
+    # print('inside manage page')
     current_page = request.args.get('page', 1, type=int)
-    print(f'{current_page} current_page')
+    # print(f'{current_page} current_page')
     item_per_page = 1
     subs_per_page = 3
     user = []
@@ -253,8 +254,8 @@ def manage():
         user_id = session['email']
         for x in postings.find({"user_id": user_id}):
             user.append(x)
-        print(f'the data is user {user} end')
-        print(user)
+        # print(f'the data is user {user} end')
+        # print(user)
     if user:
         images = {}
         for post in user:
@@ -265,16 +266,16 @@ def manage():
             images.update({post['image_id']: image})
         posts = postings.find().sort('date_posted', -1)
         pages = round(len(user) / item_per_page + .499)
-        print(f'{pages} pages')
+        # print(f'{pages} pages')
         from_page = int(current_page) * item_per_page - item_per_page
         upto_page = int(current_page) * item_per_page
         sub_from_page = int(current_page) * subs_per_page - subs_per_page
         sub_upto_page = int(current_page) * sub_from_page - sub_from_page
         list_show = user[from_page:upto_page]
         subs_list_show = user[sub_from_page:sub_upto_page]
-        print(f'{from_page} from_page , {upto_page} upto_page')
-        print(f' here is what we are sending {list_show} right')
-        print(images)
+        # print(f'{from_page} from_page , {upto_page} upto_page')
+        # print(f' here is what we are sending {list_show} right')
+        # print(images)
         return render_template('manage.html', users=list_show, pages=pages, current_page=current_page, images=images)
     else:
         flash(u'There are no posts created by you!', 'alert-danger')
@@ -297,8 +298,8 @@ def sub():
                 list_of_themes.append(doc['type'])
         print(session['email'])
         login_dump = records.find_one({'email': session['email']})
-        updated_subs = login_dump['subscriptions']
         if login_dump['subscriptions']:
+            updated_subs = login_dump['subscriptions']
             print("subscriptions exist")
             for theme in subscribed_themes:
                 if theme not in updated_subs:
@@ -375,7 +376,7 @@ def view_all():
 def view_map():
     # Viewing Ad posted by user on submit
     if "email" in session:
-        list_of_latlong, list_of_titles, list_of_description, list_of_user_id, list_of_status, list_of_themes, list_of_address = [], [], [], [], [], [], []
+        list_of_latlong, list_of_titles, list_of_description, list_of_user_id, list_of_status, list_of_themes, list_of_address, list_of_image_ids = [], [], [], [], [], [], [], []
         posts = postings.find()
         images = {}
         for post in posts:
@@ -390,6 +391,7 @@ def view_map():
             image = fs.get(post['image_id'])
             base64_data = codecs.encode(image.read(), 'base64')
             image = base64_data.decode('utf-8')
+            list_of_image_ids.append(image)
             images.update({post['image_id']: image})
 
         data = {
@@ -399,10 +401,15 @@ def view_map():
             'user_id_values': list_of_user_id,
             'status_values': list_of_status,
             'theme_values': list_of_themes,
-            'address_values': list_of_address
+            'address_values': list_of_address,
+            # 'imageid_values': list_of_image_ids,
+            'image_values': list_of_image_ids
         }
         # print(data)
-        return render_template('view_map.html', title='View Posts on the Map', data=data, images=images, posts=posts)
+        curr_loc = get_details_from_ip()
+        print(curr_loc)
+        return render_template('view_map.html', title='View Posts on the Map', data=data, images=images, posts=posts,
+                               curr_loc=curr_loc)
     else:
         return redirect(url_for("login"))
 

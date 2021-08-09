@@ -1,11 +1,14 @@
 #map {
   height: 100%;
+  transition-delay:3s;
 }
 
 /* Optional: Makes the sample page fill the window. */
 html,
 body {
+transition-delay:3s;
   height: 100%;
   margin: 10;
   padding: 10;
 }
+transition-delay:3s;
