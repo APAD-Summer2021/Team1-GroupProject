@@ -247,6 +247,8 @@ def manage():
     # print('inside manage page')
     current_page = request.args.get('page', 1, type=int)
     delete = request.args.get('delete')
+    index = request.args.get('index')
+    unsubscribe = request.args.get('unsubscribe')
     print(f'{current_page} current_page')
     item_per_page = 1
     subs_per_page = 3
@@ -279,15 +281,20 @@ def manage():
         if delete == 'True':
             print("Ready to delete", curr_id, curr_img_id)
             delpost = postings.find_one(ObjectId(curr_id))
-            print(delpost)
+            p9rint(delpost)
             postings.remove(ObjectId(curr_id))
             fs.delete(curr_img_id)
             return redirect(url_for("manage"))
-
-
+        # subss = []
         subs_list_show = user
-        print(f'{from_page} from_page , {upto_page} upto_page')
+        subs_show = records.find_one(user_id)
+        # subss = subs_show.subscriptions
+        print(f'{len(subs_list_show)} is the length')
+        print(f'{subs_show} subs and final ')
         print(f' here is what we are sending {list_show} right')
+        if unsubscribe == 'True':
+            print(f'here is the index to be deleted {index}')
+
         return render_template('manage.html', users=list_show, subs=subs_list_show, pages=pages, current_page=current_page, images=images)
     else:
         flash(u'There are no posts created by you!', 'alert-danger')

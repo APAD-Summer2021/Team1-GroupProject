@@ -13,14 +13,14 @@ body {
   height:auto;
 }
 body .carousel-indicators li{
-  background-color:darkblue;
+  background-color:#3498db;
 }
 body .carousel-indicators{
   bottom: 0;
 }
 body .carousel-control-prev-icon,
 body .carousel-control-next-icon{
-  background-color:darkblue;
+  background-color:#3498db;
     margin-left: 0px ;
 }
 body .no-padding{

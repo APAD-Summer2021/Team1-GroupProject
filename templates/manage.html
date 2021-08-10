@@ -112,23 +112,18 @@
     </tr>
 </table>
 <a href="{{url_for('manage',page = current_page, delete=True ) }}">Delete</a>
-
 <!--<a style="margin-left: 80%" href="">Edit</a>-->
 <hr>
     <h3>Subscriptions :</h3>
-
 <div id="demo" class="carousel slide" data-ride="carousel">
-
   <!-- Indicators
   <ul class="carousel-indicators">
       {% for sub in subs %}
     <li data-target="#demo" data-slide-to={{loop.count}} class="{% if loop.count==1 %} active {% endif %}"></li>
       {% endfor %}
   </ul>-->
-
   <!-- The slideshow -->
   <div class="carousel-inner">
-
       <div class="carousel-item active">
           {% for sub in subs %}
       {% if loop.index <= 3 %}
@@ -136,7 +131,7 @@
               <div class = "card" style ="width : 300px; background: white; margin-left: 250px; " >
                 <img src="{{ url_for('static', filename='image/birds.jpg') }}"  alt="Los Angeles" width="1100" height="500">
                 {{sub.type}}
-                  <a href="#">Unsubscribe</a>
+                  <a href="{{url_for('manage',page = current_page, unsubscribe = True, position = loop.index)}}">Unsubscribe</a>
               </div>
           </div>
           {% endif %}
@@ -144,7 +139,9 @@
 
     </div>
 
+      {% if subs|length > 3 %}
       <div class="carousel-item ">
+
           {% for sub in subs %}
       {% if loop.index >= 3 %}
           <div class="col-xs-3 col-sm-3 col-md-3">
@@ -155,12 +152,13 @@
           </div>
           {% endif %}
     {% endfor %}
-    </div>
 
+    </div>
+{% endif %}
 
 
   </div>
-
+{% if subs|length > 3 %}
   <!-- Left and right controls-->
   <a class="carousel-control-prev" href="#demo" data-slide="prev">
     <span class="carousel-control-prev-icon"></span>
@@ -168,6 +166,7 @@
   <a class="carousel-control-next" href="#demo" data-slide="next">
     <span class="carousel-control-next-icon"></span>
   </a>
+    {% endif %}
 </div>
 
 
