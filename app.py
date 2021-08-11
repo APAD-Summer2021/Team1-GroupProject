@@ -288,14 +288,14 @@ def manage():
         # subss = []
         subs_list_show = user
         subs_show = records.find_one({"email" : user_id})
+        show_id = subs_show['_id']
         subss = subs_show['subscriptions']
         print(f'{len(subs_list_show)} is the length')
         print(f'{subs_show} subs and {subss} final ')
         print(f' here is what we are sending {list_show} right')
-        if unsubscribe == 'True':
+        """if unsubscribe == 'True':
             print(f'here is the index to be deleted {index}')
-            db.Login.update({}, {"$unset" : {"subscriptions.index":1}})
-            db.Login.update({}, {"$pull" : {"subscriptions": 'null'}})
+            db.Login.update({_id: show_id},{'$pull': {'subscriptions': index}})"""
 
         return render_template('manage.html', users=list_show, subs=subss, pages=pages, current_page=current_page, images=images)
     else:
