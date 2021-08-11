@@ -284,7 +284,7 @@ def manage():
         if delete == 'True':
             print("Ready to delete", curr_id, curr_img_id)
             delpost = postings.find_one(ObjectId(curr_id))
-            p9rint(delpost)
+            print(delpost)
             postings.remove(ObjectId(curr_id))
             fs.delete(curr_img_id)
             return redirect(url_for("manage"))
