@@ -247,7 +247,7 @@ def manage():
     # print('inside manage page')
     current_page = request.args.get('page', 1, type=int)
     delete = request.args.get('delete')
-    index = request.args.get('index')
+    index = request.args.get('position')
     unsubscribe = request.args.get('unsubscribe')
     print(f'{current_page} current_page')
     item_per_page = 1
@@ -287,15 +287,17 @@ def manage():
             return redirect(url_for("manage"))
         # subss = []
         subs_list_show = user
-        subs_show = records.find_one(user_id)
-        # subss = subs_show.subscriptions
+        subs_show = records.find_one({"email" : user_id})
+        subss = subs_show['subscriptions']
         print(f'{len(subs_list_show)} is the length')
-        print(f'{subs_show} subs and final ')
+        print(f'{subs_show} subs and {subss} final ')
         print(f' here is what we are sending {list_show} right')
         if unsubscribe == 'True':
             print(f'here is the index to be deleted {index}')
+            db.Login.update({}, {"$unset" : {"subscriptions.index":1}})
+            db.Login.update({}, {"$pull" : {"subscriptions": 'null'}})
 
-        return render_template('manage.html', users=list_show, subs=subs_list_show, pages=pages, current_page=current_page, images=images)
+        return render_template('manage.html', users=list_show, subs=subss, pages=pages, current_page=current_page, images=images)
     else:
         flash(u'There are no posts created by you!', 'alert-danger')
         return render_template('logged_in.html', email=user_id)
