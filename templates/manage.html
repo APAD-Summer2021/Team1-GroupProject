@@ -129,9 +129,25 @@
       {% if loop.index <= 3 %}
           <div class="col-xs-3 col-sm-3 col-md-3">
               <div class = "card" style ="width : 300px; background: white; margin-left: 250px; " >
-                <img src="{{ url_for('static', filename='image/birds.jpg') }}"  alt="Los Angeles" width="1100" height="500">
-                {{sub.type}}
-                  <a href="{{url_for('manage',page = current_page, unsubscribe = True, position = loop.index)}}">Unsubscribe</a>
+                {% if 'birds'.startswith(sub|lower) %}
+                <img src="{{ url_for('static', filename='image/birds.jpg') }}"  width="1100" height="500">
+                  {% elif 'fish'.startswith(sub|lower) %}
+                <img src="{{ url_for('static', filename='image/fish.jpeg') }}"  width="1100" height="500">
+                  {% elif  'horse'.startswith(sub|lower) %}
+                <img src="{{ url_for('static', filename='image/horse.jpg') }}"  width="1100" height="500">
+                  {% elif  'dogs'.startswith(sub|lower) %}
+                <img src="{{ url_for('static', filename='image/dogs.jpg') }}"  width="1100" height="500">
+                  {% elif  'hamster'.startswith(sub|lower) %}
+                <img src="{{ url_for('static', filename='image/hamster.jpg') }}"  width="1100" height="500">
+                  {% elif  'python'.startswith(sub|lower) %}
+                <img src="{{ url_for('static', filename='image/python.jpg') }}"  width="1100" height="500">
+                  {% elif  'cats'.startswith(sub|lower) %}
+                <img src="{{ url_for('static', filename='image/cats.jpg') }}"  width="1100" height="500">
+                  {% else %}
+                  <img src="{{ url_for('static', filename='image/longhorn_kKf_icon.ico') }}"  width="1100" height="500">
+                  {% endif %}
+                {{sub}}
+                  <!--<a href="{{url_for('manage',page = current_page, unsubscribe = True, position = sub)}}">Unsubscribe</a>-->
               </div>
           </div>
           {% endif %}
@@ -146,8 +162,16 @@
       {% if loop.index >= 3 %}
           <div class="col-xs-3 col-sm-3 col-md-3">
               <div class = "card" style ="width : 300px; background: white; margin-left: 250px; " >
-                <img src="{{ url_for('static', filename='image/birds.jpg') }}"  alt="Los Angeles" width="1100" height="500">
-                {{sub.type}}
+                  {% if '{{sub}}' in 'birds' %}
+                <img src="{{ url_for('static', filename='image/birds.jpg') }}"  width="1100" height="500">
+                  {% elif '{{sub}}' in 'fish' %}
+                <img src="{{ url_for('static', filename='image/fish.jpeg') }}"  width="1100" height="500">
+                  {% elif '{{sub}}' in 'horse' %}
+                <img src="{{ url_for('static', filename='image/horse.jpg') }}"  width="1100" height="500">
+                  {% elif '{{sub}}' in 'dogs' %}
+                <img src="{{ url_for('static', filename='image/dogs.jpg') }}"  width="1100" height="500">
+                  {% endif %}
+                {{sub}}
               </div>
           </div>
           {% endif %}
