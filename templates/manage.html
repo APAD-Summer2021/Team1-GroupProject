@@ -33,10 +33,10 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup" style = "margin-left: 90%">
     <div class="navbar-nav">
-      <a class="nav-item nav-link active" href="/">Post <span class="sr-only">(current)</span></a>
-      <a class="nav-item nav-link" href="/view_post">View your post</a>
+      <a class="nav-item nav-link active" href="/new_post">Post <span class="sr-only">(current)</span></a>
+      <a class="nav-item nav-link" href="/view_own_post">View your post</a>
       <a class="nav-item nav-link" href="/view_all">View all Post</a>
-      <a class="nav-item nav-link" href="">Create Theme</a>
+      <a class="nav-item nav-link" href="/create_theme_action">Create Theme</a>
         <a class="nav-item nav-link" href="/search_page">Search</a>
         <a class="nav-item nav-link" href="/logout">Logout</a>
     </div>
@@ -129,20 +129,22 @@
       {% if loop.index <= 3 %}
           <div class="col-xs-3 col-sm-3 col-md-3">
               <div class = "card" style ="width : 300px; background: white; margin-left: 250px; " >
-                {% if 'birds'.startswith(sub|lower) %}
+                {% if 'bird'.startswith(sub|lower) %}
                 <img src="{{ url_for('static', filename='image/birds.jpg') }}"  width="1100" height="500">
                   {% elif 'fish'.startswith(sub|lower) %}
                 <img src="{{ url_for('static', filename='image/fish.jpeg') }}"  width="1100" height="500">
                   {% elif  'horse'.startswith(sub|lower) %}
                 <img src="{{ url_for('static', filename='image/horse.jpg') }}"  width="1100" height="500">
-                  {% elif  'dogs'.startswith(sub|lower) %}
+                  {% elif  'dog'.startswith(sub|lower) %}
                 <img src="{{ url_for('static', filename='image/dogs.jpg') }}"  width="1100" height="500">
-                  {% elif  'hamster'.startswith(sub|lower) %}
+                  {% elif  'rodent'.startswith(sub|lower) %}
                 <img src="{{ url_for('static', filename='image/hamster.jpg') }}"  width="1100" height="500">
-                  {% elif  'python'.startswith(sub|lower) %}
-                <img src="{{ url_for('static', filename='image/python.jpg') }}"  width="1100" height="500">
+                  {% elif  'reptile'.startswith(sub|lower) %}
+                <img src="{{ url_for('static', filename='image/python.jpeg') }}"  width="1100" height="500">
                   {% elif  'cats'.startswith(sub|lower) %}
                 <img src="{{ url_for('static', filename='image/cats.jpg') }}"  width="1100" height="500">
+                  {% elif  'seal'.startswith(sub|lower) %}
+                <img src="{{ url_for('static', filename='image/seal.jpg') }}"  width="1100" height="500">
                   <!--{% else %}
                   <img src="{{ url_for('static', filename='image/1200px-Blank_square.svg.png') }}" alt="No Image Found" width="1100" height="500">-->
                   {% endif %}
@@ -162,20 +164,22 @@
       {% if loop.index > 3 %}
           <div class="col-xs-3 col-sm-3 col-md-3">
               <div class = "card" style ="width : 300px; background: white; margin-left: 250px; " >
-                  {% if 'birds'.startswith(sub|lower) %}
+                  {% if 'bird'.startswith(sub|lower) %}
                 <img src="{{ url_for('static', filename='image/birds.jpg') }}"  width="1100" height="500">
                   {% elif 'fish'.startswith(sub|lower) %}
                 <img src="{{ url_for('static', filename='image/fish.jpeg') }}"  width="1100" height="500">
                   {% elif  'horse'.startswith(sub|lower) %}
                 <img src="{{ url_for('static', filename='image/horse.jpg') }}"  width="1100" height="500">
-                  {% elif  'dogs'.startswith(sub|lower) %}
+                  {% elif  'dog'.startswith(sub|lower) %}
                 <img src="{{ url_for('static', filename='image/dogs.jpg') }}"  width="1100" height="500">
-                  {% elif  'hamster'.startswith(sub|lower) %}
+                  {% elif  'rodent'.startswith(sub|lower) %}
                 <img src="{{ url_for('static', filename='image/hamster.jpg') }}"  width="1100" height="500">
-                  {% elif  'python'.startswith(sub|lower) %}
-                <img src="{{ url_for('static', filename='image/python.jpg') }}"  width="1100" height="500">
-                  {% elif  'cats'.startswith(sub|lower) %}
+                  {% elif  'reptile'.startswith(sub|lower) %}
+                <img src="{{ url_for('static', filename='image/python.jpeg') }}"  width="1100" height="500">
+                  {% elif  'cat'.startswith(sub|lower) %}
                 <img src="{{ url_for('static', filename='image/cats.jpg') }}"  width="1100" height="500">
+                  {% elif  'seal'.startswith(sub|lower) %}
+                <img src="{{ url_for('static', filename='image/seal.jpg') }}"  width="1100" height="500">
                     <!--{% else %}
                   <img src="{{ url_for('static', filename='image/1200px-Blank_square.svg.png') }}"  width="1100" height="500">-->
                   {% endif %}
@@ -184,7 +188,8 @@
           </div>
           {% endif %}
     {% endfor %}
-
+<br>
+<br>
     </div>
 {% endif %}
 
