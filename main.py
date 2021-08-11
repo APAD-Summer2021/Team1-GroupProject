@@ -46,7 +46,7 @@ def generate_latlong_from_address(address):
     r = requests.get(f"{base_url}{urllib.parse.urlencode(params)}")
     data = json.loads(r.content)
     latlong = data.get("results")[0].get("geometry").get("location")
-    # print(latlong)
+    # print(address,latlong)
     return latlong
 
 
@@ -433,6 +433,7 @@ def view_map():
             image = base64_data.decode('utf-8')
             list_of_image_ids.append(image)
             images.update({post['image_id']: image})
+        # print(list_of_address,list_of_latlong)
 
         data = {
             'latlongvalues': list_of_latlong,

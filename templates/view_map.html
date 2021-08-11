@@ -32,6 +32,7 @@ function initMap() {
   });
 
   function addMarker(location,title,description,status,user_id,address,image){
+        // alert(address)
         const contentString =
         '<div class="info-window">' +
         '<table>'+
@@ -68,8 +69,10 @@ function initMap() {
             shouldFocus: false,
         });
     });
+
+    // alert('marker created for:' + address)
   }
-  addMarker()
+//   addMarker()
   for (var i = 0; i < lls.length; i++) {
                 var location = {
                     lat: lls[i]['lat'],
@@ -93,7 +96,7 @@ function initMap() {
                     address: address,
                     image : image
                 }
-<!--                console.log(property.location)-->
+                // console.log(property.location)
                 addMarker(property.location,property.title,property.description,property.status,property.user_id,property.address, property.image)
   }
 
