@@ -33,8 +33,8 @@
          <label for="filter">Select Type of Pet :</label>
          <select name="type" id="select_type">
             <option value=all>All</option>
-             {% for theme in list_of_themes %}
-            <option value="{{ theme }}">{{ theme }}</option>
+             {% for theme in list_of_themes_db %}
+            <option value="{{ theme['theme_name'] }}">{{ theme['theme_name'] }}</option>
              {% endfor %}
             <option value=Other>Other</option>
          </select>

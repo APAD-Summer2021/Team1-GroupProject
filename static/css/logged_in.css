@@ -19,13 +19,13 @@ body {
   max-height:1000px;
   border: none;
   width: 500px;
-  height: 700px;
+  height: 800px;
   padding: 30px;
   background: #191919;
   border-radius: 15px;
   text-align: center;
   transition: 0.25s;
-  margin-top: 0cm;
+  margin-top: 2cm;
 
 }
 

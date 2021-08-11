@@ -27,9 +27,16 @@ db = client.get_database('APAD_Group1_DB')
 records = db.Login
 postings = db.Postings
 user_data = db.Userdata
+themes_db = db.Themes
 fs = gridfs.GridFS(db)
 db = client.test
 
+db_dump_themes = themes_db.find()
+list_of_themes_db = []
+for theme in db_dump_themes:
+    if theme not in list_of_themes_db:
+        list_of_themes_db.append(theme)
+print(list_of_themes_db)
 
 def generate_latlong_from_address(address):
     base_url = "https://maps.googleapis.com/maps/api/geocode/json?"
@@ -143,7 +150,7 @@ def search_page():
 
 @app.route("/new_post")
 def new_post():
-    return render_template('new_post.html')
+    return render_template('new_post.html',list_of_themes_db=list_of_themes_db)
 
 
 @app.route("/post_action", methods=['POST'])
@@ -336,7 +343,7 @@ def sub():
                                                  {"$set": {"subscriptions": subscribed_themes}})
         for record in records.find():
             print(record)
-        return render_template('sub.html', title='Subscribe', list_of_themes=list_of_themes, message=message)
+        return render_template('sub.html', title='Subscribe', list_of_themes_db=list_of_themes_db, message=message)
     else:
         return redirect(url_for("login_in"))
 
@@ -380,7 +387,7 @@ def view_all():
                 images.update({post['image_id']: image})
             posts = postings.find().sort('date_posted', -1)
             return render_template('all_posts.html', title='View posts', posts=posts, images=images,
-                                   list_of_themes=list_of_themes)
+                                   list_of_themes_db=list_of_themes_db)
         else:
             list_of_themes =[]
             posts = postings.find().sort('date_posted', -1)
@@ -398,7 +405,7 @@ def view_all():
                 image = base64_data.decode('utf-8')
                 images.update({post['image_id']: image})
             posts = postings.find({"type": type_of_pet}).sort('date_posted', -1)
-            return render_template('all_posts.html', title='View posts', posts=posts, images=images, list_of_themes=list_of_themes)
+            return render_template('all_posts.html', title='View posts', posts=posts, images=images, list_of_themes_db=list_of_themes_db)
     else:
         return redirect(url_for("login"))
 
@@ -444,8 +451,36 @@ def view_map():
     else:
         return redirect(url_for("login"))
 
+@app.route("/create_theme_action")
+def create_theme_action():
+    return render_template('create_theme.html')
+
+@app.route("/create_theme", methods=['GET','POST'])
+def create_theme():
+    if "email" in session:
+        user_id = session["email"]
+        if user_id != "admin":
+            flash(u'You dont have access to perform this function !!', 'alert-danger')
+            return render_template('logged_in.html', email=user_id)
+        else:
+            theme_name = request.form.get("theme")
+            post_date = datetime.datetime.now().strftime("%m/%d/%Y %I:%M %p")
+            desc = request.values.get("description")
+            image = request.files["file"]
+            img_id = fs.put(image, content_type=image.content_type, filename=theme_name)
+            post_response = themes_db.insert_one(
+                {"theme_name": theme_name, "date_posted": post_date, "detailed_description": desc, 
+                "image_id": img_id})
+            print(str(post_response.inserted_id))
+            message = "Created New Theme : " + theme_name
+            flash(message, 'alert-danger')
+            return redirect("/logged_in")
+
+    else:
+        return redirect(url_for("login"))
+
 
 # end of code to run it
 if __name__ == "__main__":
-    get_details_from_ip()
+    db_dump_posts = postings.find()
     app.run(debug=True)

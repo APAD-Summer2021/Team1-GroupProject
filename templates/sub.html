@@ -20,9 +20,9 @@
          <div class="collapse navbar-collapse" id="navbarNavAltMarkup" style = "margin-left: 90%">
             <div class="navbar-nav">
                <a class="nav-item nav-link active" href="/">Post <span class="sr-only">(current)</span></a>
-               <a class="nav-item nav-link" href="/view_post">View your post</a>
+               <a class="nav-item nav-link" href="/view_own_posts">View your post</a>
                <a class="nav-item nav-link" href="/view_all">View all Post</a>
-               <a class="nav-item nav-link" href="">Create Theme</a>
+               <a class="nav-item nav-link" href="/create_theme_action">Create Theme</a>
                <a class="nav-item nav-link" href="/search_page">Search</a>
                <a class="nav-item nav-link" href="/logout">Logout</a>
             </div>
@@ -39,8 +39,8 @@
       
         <legend>Select all the themes you want to subscribe</legend>
         <div class =buttons>
-      {% for theme in list_of_themes %}
-        <input type="checkbox" name="themes" value="{{ theme }}"> {{ theme }} <br>
+      {% for theme in list_of_themes_db %}
+        <input type="checkbox" name="themes" value="{{ theme['theme_name'] }}"> {{ theme['theme_name'] }} <br>
           {%  endfor  %}
           <br>
         <input type="submit" value="Subscribe now" />

@@ -20,9 +20,9 @@
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup" style = "margin-left: 90%">
     <div class="navbar-nav">
       <a class="nav-item nav-link active" href="/">Post <span class="sr-only">(current)</span></a>
-      <a class="nav-item nav-link" href="/view_post">View your post</a>
+      <a class="nav-item nav-link" href="/view_own_posts">View your post</a>
       <a class="nav-item nav-link" href="/view_all">View all Post</a>
-      <a class="nav-item nav-link" href="">Create Theme</a>
+      <a class="nav-item nav-link" href="/create_theme_action">Create Theme</a>
         <a class="nav-item nav-link" href="/search_page">Search</a>
         <a class="nav-item nav-link" href="/logout">Logout</a>
     </div>
@@ -46,17 +46,13 @@
                         </thead>
                         <tbody>
                             <tr>
-    <td><p> <label for="type">Select Type of Pet</label>
-            <select name="type" id="type" form="posting" >
-                <option value=Dog>Dog</option>
-                <option value=Cat>Cat</option>
-                <option value=Bird>Bird</option>
-                <option value=Fish>Fish</option>
-                <option value=Horse>Horse</option>
-                <option value=Rodent>Rodent</option>
-                <option value=Reptile>Reptile</option>
-                <option value=Other>Other</option>
-        </select></p></td>
+    <td><p> <label for="filter">Select Type of Pet :</label>
+         <select name="type" id="select_type">
+             {% for theme in list_of_themes_db %}
+            <option value="{{ theme['theme_name'] }}">{{ theme['theme_name'] }}</option>
+             {% endfor %}
+            <option value=Other>Other</option>
+         </select>
     <td>Tags <input type="text" name="tags" placeholder="Separate tags by comma" /></td>
     <td></td>
   </tr>
