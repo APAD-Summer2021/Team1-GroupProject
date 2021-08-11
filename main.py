@@ -115,6 +115,8 @@ def search_page():
     if "email" in session:
         email = session["email"]
         search = request.form.get('search')
+        if search is not None:
+          search = search.lower()
         query = {
             "tags": {
                 "$regex": search,
@@ -151,6 +153,7 @@ def post_action():
         user_id = session["email"]
         type_of_pet = request.form.get("type")
         tags = request.values.get("tags")
+        tags = tags.lower()
         post_date = datetime.datetime.now().strftime("%m/%d/%Y %I:%M %p")
         title = request.values.get("title")
         desc = request.values.get("description")
