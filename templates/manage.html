@@ -177,7 +177,7 @@
                   {% elif  'cats'.startswith(sub|lower) %}
                 <img src="{{ url_for('static', filename='image/cats.jpg') }}"  width="1100" height="500">
                   {% else %}
-                  <img src="#" alt="No Image Found" width="1100" height="500">
+                <img  alt="No Image Found" width="1100" height="500">
                   {% endif %}
                 {{sub}}
               </div>
