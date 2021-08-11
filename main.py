@@ -36,7 +36,7 @@ list_of_themes_db = []
 for theme in db_dump_themes:
     if theme not in list_of_themes_db:
         list_of_themes_db.append(theme)
-print(list_of_themes_db)
+# print(list_of_themes_db)
 
 def generate_latlong_from_address(address):
     base_url = "https://maps.googleapis.com/maps/api/geocode/json?"
@@ -99,7 +99,7 @@ def index():
             hashed = bcrypt.hashpw(password2.encode('utf-8'), bcrypt.gensalt())
             user_input = {'name': user, 'email': email, 'password': hashed}
             response = records.insert_one(user_input)
-            print(response.inserted_id)
+            # print(response.inserted_id)
 
             user_data = records.find_one({"email": email})
             new_email = user_data['email']
@@ -166,7 +166,7 @@ def post_action():
         desc = request.values.get("description")
         location = request.values.get("location")
         # image = request.values.get('pet_image')
-        print(request.files)
+        # print(request.files)
         if 'file' in request.files:
             print('Here')
             image = request.files["file"]
@@ -182,11 +182,11 @@ def post_action():
         post_response = postings.insert_one(
             {"user_id": user_id, "tags": tags, "date_posted": post_date, "detailed_description": desc,
              "post_title": title, "location": location, "image_id": img_id, "type": type_of_pet, "status": status})
-        print(str(post_response.inserted_id))
+        # print(str(post_response.inserted_id))
         post_id = str(post_response.inserted_id)
         # insert document ID into User_data table
         user_data.insert_one({"user_id": user_id, "posts": [post_id], })
-        print(post_id)
+        # print(post_id)
         session["post_id"] = post_id
         '''item = postings.find_one({'id': img_id})
         image = fs.get(item['id'])
@@ -201,11 +201,11 @@ def post_action():
 def view_post():
     # Viewing Ad posted by user on submit
     if "email" in session:
-        print(session["post_id"])
+        # print(session["post_id"])
         post_id = session["post_id"]
         document_posted = postings.find_one({"_id": ObjectId(post_id)})
         item = postings.find_one({'id': document_posted['image_id']})
-        print(document_posted)
+        # print(document_posted)
         image = fs.get(document_posted['image_id'])
         base64_data = codecs.encode(image.read(), 'base64')
         image = base64_data.decode('utf-8')
@@ -259,7 +259,7 @@ def manage():
     delete = request.args.get('delete')
     index = request.args.get('position')
     unsubscribe = request.args.get('unsubscribe')
-    print(f'{current_page} current_page')
+    # print(f'{current_page} current_page')
     item_per_page = 1
     subs_per_page = 3
     user = []
@@ -267,8 +267,8 @@ def manage():
         user_id = session['email']
         for x in postings.find({"user_id": user_id}):
             user.append(x)
-        print(f'the data is user {user} end')
-        print(user)
+        # print(f'the data is user {user} end')
+        # print(user)
         user.reverse()
     if user:
         images = {}
@@ -289,9 +289,9 @@ def manage():
         curr_id = (list_show[0]['_id'])
         curr_img_id = (list_show[0]['image_id'])
         if delete == 'True':
-            print("Ready to delete", curr_id, curr_img_id)
+            # print("Ready to delete", curr_id, curr_img_id)
             delpost = postings.find_one(ObjectId(curr_id))
-            print(delpost)
+            # print(delpost)
             postings.remove(ObjectId(curr_id))
             fs.delete(curr_img_id)
             return redirect(url_for("manage"))
@@ -300,9 +300,9 @@ def manage():
         subs_show = records.find_one({"email" : user_id})
         show_id = subs_show['_id']
         subss = subs_show['subscriptions']
-        print(f'{len(subs_list_show)} is the length')
-        print(f'{subs_show} subs and {subss} final ')
-        print(f' here is what we are sending {list_show} right')
+        # print(f'{len(subs_list_show)} is the length')
+        # print(f'{subs_show} subs and {subss} final ')
+        # print(f' here is what we are sending {list_show} right')
         """if unsubscribe == 'True':
             print(f'here is the index to be deleted {index}')
             db.Login.update({_id: show_id},{'$pull': {'subscriptions': index}})"""
@@ -317,7 +317,7 @@ def manage():
 def sub():
     if "email" in session:
         subscribed_themes = request.form.getlist('themes')
-        print(subscribed_themes)
+        # print(subscribed_themes)
         if len(subscribed_themes) > 0:
             message = "You have successfully subscribed to  - " + str(subscribed_themes)
         else:
@@ -327,14 +327,14 @@ def sub():
         for doc in post_dump:
             if doc['type'] not in list_of_themes:
                 list_of_themes.append(doc['type'])
-        print(session['email'])
+        # print(session['email'])
         login_dump = records.find_one({'email': session['email']})
         if 'subscriptions' in login_dump.keys():
             updated_subs = login_dump['subscriptions']
         else:
             updated_subs = []
         if 'subscriptions' in login_dump.keys():
-            print("subscriptions exist")
+            # print("subscriptions exist")
             for theme in subscribed_themes:
                 if theme not in updated_subs:
                     updated_subs.append(theme)
@@ -343,8 +343,8 @@ def sub():
         else:
             response_update = records.update_one({'email': session['email']},
                                                  {"$set": {"subscriptions": subscribed_themes}})
-        for record in records.find():
-            print(record)
+        # for record in records.find():
+            # print(record)
         return render_template('sub.html', title='Subscribe', list_of_themes_db=list_of_themes_db, message=message)
     else:
         return redirect(url_for("login_in"))
@@ -374,7 +374,7 @@ def view_all():
     type_of_pet = request.form.get('type')
     if "email" in session:
         if type_of_pet is None or type_of_pet == 'all':
-            print(type_of_pet)
+            # print(type_of_pet)
             posts = postings.find().sort('date_posted', -1)
             # posts01 = list(posts)
             images = {}
@@ -397,7 +397,7 @@ def view_all():
                 # print(post)
                 if post['type'] not in list_of_themes:
                     list_of_themes.append(post['type'])          
-            print(type_of_pet)
+            # print(type_of_pet)
             posts = postings.find({"type": type_of_pet}).sort('date_posted', -1)
             images = {}
             for post in posts:
@@ -447,7 +447,7 @@ def view_map():
         }
         # print(data)
         curr_loc = get_details_from_ip()
-        print(curr_loc)
+        # print(curr_loc)
         return render_template('view_map.html', title='View Posts on the Map', data=data, images=images, posts=posts,
                                curr_loc=curr_loc)
     else:
@@ -473,7 +473,7 @@ def create_theme():
             post_response = themes_db.insert_one(
                 {"theme_name": theme_name, "date_posted": post_date, "detailed_description": desc, 
                 "image_id": img_id})
-            print(str(post_response.inserted_id))
+            # print(str(post_response.inserted_id))
             message = "Created New Theme : " + theme_name
             flash(message, 'alert-danger')
             return redirect("/logged_in")

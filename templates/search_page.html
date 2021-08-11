@@ -23,21 +23,33 @@
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup" style = "margin-left: 90%">
     <div class="navbar-nav">
       <a class="nav-item nav-link active" href="/">Post <span class="sr-only">(current)</span></a>
-      <a class="nav-item nav-link" href="/view_post">View your post</a>
+      <a class="nav-item nav-link" href="/view_own_post">View your post</a>
       <a class="nav-item nav-link" href="/view_all">View all Post</a>
-      <a class="nav-item nav-link" href="">Create Theme</a>
+      <a class="nav-item nav-link" href="/create_theme_action">Create Theme</a>
       <a class="nav-item nav-link" href="/logout">Logout</a>
     </div>
   </div>
 </nav>
-  <form action="/search_page" method="Post"><div class="input-field">
+
+
+<div class="container">
+  <div class="row">
+      <div class="col-md-6">
+        <div class = "card">
+            <form action="/search_page" method="Post">
+                <div class="input-field">
                 <div class="input-select">
-                  <p align="center">Search:</p>
+                  <p style="color: white;"align="center">Search</p>
                   <input type ="text" align="center" name="search" id="search" placeholder="Search by Tags" />
-  <p ALIGN=LEFT><button type="submit">Search</button></p></form>
+  <p ALIGN=Center><button type="submit">Search</button></p></form>
+        </div></div></div></form>
+
+<br>
+<br>
         {% for post in posts %}
+        <br>
       <div class="tbl-content">
-         <table cellpadding="0" cellspacing="0" border="0">
+         <table cellpadding="5" cellspacing="5" border="5">
              <tbody>
                <tr>
                   <td>Title:</td>
@@ -77,121 +89,5 @@
          </table>
       </div>
       {% endfor %}
-    <div class="s010">
-      <form>
-
-        <div class="inner-form">
-
-          <div class="advance-search">
-            <span class="desc">Add your search criteria</span>
-            <div class="row">
-              <div class="input-field">
-                <div class="input-select">
-
-                  <p>Tags:</p>
-                  <input type ="text" name="Tags" placeholder="Tags" />
-
-                </div>
-              </div>
-              <div class="input-field">
-                <div class="input-select">
-                  <p>Title:</p>
-                  <input type ="text" name="title" placeholder="Title" />
-                </div>
-              </div>
-              <div class="input-field">
-                <div class="input-select">
-
-                  <p>Type of Pet: </p>
-                  <select data-trigger="" name="Type">
-                    <option value=”dog02”>Dog 0-2 Years</option>
-                    <option value=”dog35”>Dog 3-5 Years</option>
-                    <option value=”dog68”>Dog 6-8 Years</option>
-                    <option value=”dog+”>Dog 8+ Years</option>
-                    <option value=”cat”>Cat</option>
-                    <option value=”bird”>Bird</option>
-                    <option value=”fish”>Fish</option>
-                    <option value=”horse”>Horse</option>
-                    <option value=”rodent”>Rodent</option>
-                    <option value=”reptile”>Reptile</option>
-                    <option value=”other”>Other</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class = "row"></div>
-            <div class="row second">
-              <div class="input-field">
-                <div class="input-select">
-                  <p>Location:</p>
-                  <input type ="text" name="Location" placeholder="Location" />
-                </div>
-              </div>
-              <div class="input-field">
-                <div class="input-select">
-                  <p>Post Date:</p>
-                  <input type ="text" name="Date_Posted" placeholder="Post Date" />
-                </div>
-              </div>
-              <div class="input-field">
-                <div class="input-select">
-                  <p>Description</p>
-                  <input type ="text" name="Desc" placeholder="Description" />
-                </div>
-              </div>
-            </div>
-            <div class="row third">
-              <div class="input-field">
-                <div class="result-count">
-                  <span>we can show total count of  </span>results</div>
-                <div class="group-btn">
-                  <button class="btn-delete" id="delete">RESET</button>
-                  <button class="btn-search">SEARCH</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </form>
-    </div>
-    <script src="js/extention/choices.js"></script>
-    <script>
-      const customSelects = document.querySelectorAll("select");
-      const deleteBtn = document.getElementById('delete')
-      const choices = new Choices('select',
-      {
-        searchEnabled: false,
-        itemSelectText: '',
-        removeItemButton: true,
-      });
-      for (let i = 0; i < customSelects.length; i++)
-      {
-        customSelects[i].addEventListener('addItem', function(event)
-        {
-          if (event.detail.value)
-          {
-            let parent = this.parentNode.parentNode
-            parent.classList.add('valid')
-            parent.classList.remove('invalid')
-          }
-          else
-          {
-            let parent = this.parentNode.parentNode
-            parent.classList.add('invalid')
-            parent.classList.remove('valid')
-          }
-        }, false);
-      }
-      deleteBtn.addEventListener("click", function(e)
-      {
-        e.preventDefault()
-        const deleteAll = document.querySelectorAll('.choices__button')
-        for (let i = 0; i < deleteAll.length; i++)
-        {
-          deleteAll[i].click();
-        }
-      });
-
-    </script>
-  </body><!-- This templates was made by Colorlib (https://colorlib.com) -->
-
+    </body>
+</html>
