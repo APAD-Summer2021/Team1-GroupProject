@@ -150,6 +150,11 @@ def search_page():
 
 @app.route("/new_post")
 def new_post():
+    db_dump_themes = themes_db.find()
+    list_of_themes_db = []
+    for theme in db_dump_themes:
+        if theme not in list_of_themes_db:
+            list_of_themes_db.append(theme)
     return render_template('new_post.html',list_of_themes_db=list_of_themes_db)
 
 
@@ -315,6 +320,12 @@ def manage():
 
 @app.route('/sub', methods=['GET', 'POST'])
 def sub():
+    
+    db_dump_themes = themes_db.find()
+    list_of_themes_db = []
+    for theme1 in db_dump_themes:
+        if theme1 not in list_of_themes_db:
+            list_of_themes_db.append(theme1)
     if "email" in session:
         subscribed_themes = request.form.getlist('themes')
         # print(subscribed_themes)
@@ -371,7 +382,12 @@ def view_own_posts():
 @app.route("/view_all", methods=['GET', 'POST'])
 def view_all():
     # Viewing all posts, show newest posts first
-    type_of_pet = request.form.get('type')
+    type_of_pet = request.form.get('type')   
+    db_dump_themes = themes_db.find()
+    list_of_themes_db = []
+    for theme in db_dump_themes:
+        if theme not in list_of_themes_db:
+            list_of_themes_db.append(theme)
     if "email" in session:
         if type_of_pet is None or type_of_pet == 'all':
             # print(type_of_pet)
