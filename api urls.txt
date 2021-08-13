@@ -1,0 +1,4 @@
+for login - /api/login?email=admin&password=1234
+for posting a new listing - 
+for viewing all posts - https://5000-cs-139307086613-default.cs-us-central1-pits.cloudshell.dev/api/view_all?type=all
+for specific theme https://5000-cs-139307086613-default.cs-us-central1-pits.cloudshell.dev/api/view_all?type=Dog
