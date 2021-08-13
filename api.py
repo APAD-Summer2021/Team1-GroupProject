@@ -14,6 +14,7 @@ import certifi
 import requests
 import sys
 
+api_setup = Blueprint('api', __name__)
 
 app = Flask(__name__)
 app.secret_key = "PetHavenAPAD"
@@ -32,9 +33,6 @@ themes_db = db.Themes
 fs = gridfs.GridFS(db)
 db = client.test
 
-api_setup = Blueprint('api', __name__)
-
-app.register_blueprint(api_setup, url_prefix='/petapi')
 
 db_dump_themes = themes_db.find()
 list_of_themes_db = []
@@ -76,8 +74,9 @@ def get_details_from_ip():
 # Create an object of GridFs for the above database.
 
 
-@app.route("/", methods=['post', 'get'])
+@api_setup.route("/", methods=['post', 'get'])
 def index():
+    # message = ''
     if "email" in session:
         return redirect(url_for("logged_in"))
     if request.method == "POST":
@@ -323,7 +322,7 @@ def manage():
 
 @app.route('/sub', methods=['GET', 'POST'])
 def sub():
-    
+
     db_dump_themes = themes_db.find()
     list_of_themes_db = []
     for theme1 in db_dump_themes:
@@ -385,7 +384,7 @@ def view_own_posts():
 @app.route("/view_all", methods=['GET', 'POST'])
 def view_all():
     # Viewing all posts, show newest posts first
-    type_of_pet = request.form.get('type')   
+    type_of_pet = request.form.get('type')
     db_dump_themes = themes_db.find()
     list_of_themes_db = []
     for theme in db_dump_themes:
@@ -415,7 +414,7 @@ def view_all():
             for post in posts:
                 # print(post)
                 if post['type'] not in list_of_themes:
-                    list_of_themes.append(post['type'])          
+                    list_of_themes.append(post['type'])
             # print(type_of_pet)
             posts = postings.find({"type": type_of_pet}).sort('date_posted', -1)
             images = {}
@@ -491,7 +490,7 @@ def create_theme():
             image = request.files["file"]
             img_id = fs.put(image, content_type=image.content_type, filename=theme_name)
             post_response = themes_db.insert_one(
-                {"theme_name": theme_name, "date_posted": post_date, "detailed_description": desc, 
+                {"theme_name": theme_name, "date_posted": post_date, "detailed_description": desc,
                 "image_id": img_id})
             # print(str(post_response.inserted_id))
             message = "Created New Theme : " + theme_name
@@ -504,5 +503,4 @@ def create_theme():
 
 # end of code to run it
 if __name__ == "__main__":
-    db_dump_posts = postings.find()
     app.run(debug=True)
