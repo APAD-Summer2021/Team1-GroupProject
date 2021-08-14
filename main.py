@@ -181,6 +181,20 @@ def logout():
         message = 'Please login to your account'
         return jsonify({'message': message})
 
+
+@app.route("/api/get_themes", methods=["POST", "GET"])
+def get_themes():
+    if "email" in session:
+        db_dump_themes = themes_db.find()
+        list_of_themes_db = []
+        for theme in db_dump_themes:
+            if theme['theme_name'] not in list_of_themes_db:
+                list_of_themes_db.append(theme['theme_name'])
+        return jsonify({'list_of_themes': list_of_themes_db})
+    else:
+        message = 'Please login to your account'
+        return jsonify({'message': message})
+
 @app.route("/api/view_all", methods=['GET', 'POST'])
 def view_all():
     print(request.args)
