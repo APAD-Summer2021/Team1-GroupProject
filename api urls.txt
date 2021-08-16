@@ -3,3 +3,9 @@ for posting a new listing - https://apadphase3pethaven.uc.r.appspot.com/api/new_
 for viewing all posts - https://apadphase3pethaven.uc.r.appspot.com/api/view_all?type=all
 for specific theme https://apadphase3pethaven.uc.r.appspot.com/api/view_all?type=Dog
 get theme - https://apadphase3pethaven.uc.r.appspot.com/api/get_themes
+
+https://apadphase3pethaven.uc.r.appspot.com/api/post_action?tags=dog,puppy&detailed_description=Description&location=WindsorPark&type=Dog&title=Cutedogneedsahome
+
+
+{"user_id": user_id, "tags": tags, "date_posted": post_date, "detailed_description": desc,
+"post_title": title, "location": location, "image_id": img_id, "type": type_of_pet, "status": status})

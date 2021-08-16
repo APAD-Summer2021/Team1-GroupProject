@@ -13,6 +13,7 @@ import googlemaps
 import certifi
 import requests
 import sys
+import base64
 
 
 app = Flask(__name__)
@@ -42,6 +43,7 @@ for theme in db_dump_themes:
     if theme not in list_of_themes_db:
         list_of_themes_db.append(theme)
 
+
 def generate_latlong_from_address(address):
     base_url = "https://maps.googleapis.com/maps/api/geocode/json?"
     params = {"address": address,
@@ -52,6 +54,15 @@ def generate_latlong_from_address(address):
     latlong = data.get("results")[0].get("geometry").get("location")
     # print(address,latlong)
     return latlong
+
+def revToAddress(loc):
+    gmaps = googlemaps.Client(key=AUTH_KEY)
+    reverse_geocode_result = gmaps.reverse_geocode(loc)
+    print(reverse_geocode_result[0]['formatted_address'])
+    return reverse_geocode_result[0]['formatted_address']
+    
+revToAddress((22.5757344, 88.4048656))
+
 
 @app.route("/api/signup", methods=['post', 'get'])
 def index():
@@ -102,39 +113,42 @@ def index():
 def post_action():
     # Adding a Post
     try:
-        if "email" in session:
-            user_id = session["email"]
-            type_of_pet = request.args.get("type")
-            tags = str(request.args.get("tags"))
-            tags = tags.lower()
-            post_date = datetime.datetime.now().strftime("%m/%d/%Y %I:%M %p")
-            title = request.args.get("title")
-            desc = request.args.get("description")
-            location = request.args.get("location")
-            # if 'file' in request.files:
+        user_id = request.form.get("user")
+        type_of_pet = request.form.get("type")
+        tags = str(request.form.get("tags"))
+        tags = tags.lower()
+        post_date = datetime.datetime.now().strftime("%m/%d/%Y %I:%M %p")
+        title = request.form.get("title")
+        desc = request.form.get("detailed_description")
+        latitude = request.form.get('latitude')
+        longitude = request.form.get('longitude')
+        location = revToAddress((latitude,longitude))
+        # img_data = request.args.get('image')
+        # location = request.args.get("location")
+        # with open("image.png", "wb") as image:
+            # image.write(base64.decodebytes(img_data))
+        if 'file' in request.files:
             # print('Here')
             image = request.files["file"]
-            title = request.args.get('title')
             img_id = fs.put(image, content_type=image.content_type, filename=title)
             # status = postings.insert_one(query)
-            status = "Open"
-            if (user_id != None or tags !=None or desc != None or title !=None or location !=None or img_id !=None or type_of_pet !=None):            
-                post_response = postings.insert_one(
-                    {"user_id": user_id, "tags": tags, "date_posted": post_date, "detailed_description": desc,
-                    "post_title": title, "location": location, "image_id": img_id, "type": type_of_pet, "status": status})
-                # print(str(post_response.inserted_id))
-                post_id = str(post_response.inserted_id)
-                # insert document ID into User_data table
-                user_data.insert_one({"user_id": user_id, "posts": [post_id], })
-                # print(post_id)
-                session["post_id"] = post_id
-                message = "Successfully Posted"
-                return jsonify({'message':message})
-            else:
-                message = "Invalid Inputs received"
-                return jsonify({'message':message})
         else:
-            message = 'Please login to your account'
+            img_id = "Dummy"
+        status = "Open"
+        if (user_id != None or tags !=None or desc != None or title !=None or location !=None or type_of_pet !=None):            
+            post_response = postings.insert_one({"user_id": user_id, "tags": tags, "date_posted": post_date, 
+            "detailed_description": desc, "post_title": title, "location": location, "image_id": img_id, 
+            "type": type_of_pet, "status": status})
+                # print(str(post_response.inserted_id))
+            post_id = str(post_response.inserted_id)
+                # insert document ID into User_data table
+            user_data.insert_one({"user_id": user_id, "posts": [post_id], })
+                # print(post_id)
+            # session["post_id"] = post_id
+            message = "Successfully Posted"
+            return jsonify({'message':message})
+        else:
+            message = "Invalid Inputs received"
             return jsonify({'message':message})
     except Exception as e:
         print(e)
@@ -199,7 +213,7 @@ def get_themes():
 def view_all():
     print(request.args)
     # Viewing all posts, show newest posts first
-    list_of_latlong, list_of_titles, list_of_description, list_of_user_id, list_of_status, list_of_themes, list_of_address, list_of_image_ids = [], [], [], [], [], [], [], []
+    list_of_latlong, list_of_titles, list_of_description, list_of_user_id, list_of_status, list_of_themes, list_of_address, list_of_images = [], [], [], [], [], [], [], []
     data = {}
     type_of_pet = request.args.get('type')
     print(type_of_pet)
@@ -208,70 +222,71 @@ def view_all():
     for theme in db_dump_themes:
         if theme not in list_of_themes_db:
             list_of_themes_db.append(theme)
-    if "email" in session:
-
-        if type_of_pet is None or type_of_pet == 'all':
-            # print(type_of_pet)
-            posts = postings.find().sort('date_posted', -1)
+    # if "email" in session:
+    if type_of_pet is None or type_of_pet == 'all':
+        print(type_of_pet)
+        posts = postings.find().sort('date_posted', -1)
             # posts01 = list(posts)
-            images = {}
-            list_of_themes = []
-            for post in posts:
-                if post['type'] not in list_of_themes:
-                    list_of_themes.append(post['type'])
-                image = fs.get(post['image_id'])
-                base64_data = codecs.encode(image.read(), 'base64')
-                image = base64_data.decode('utf-8')
-                images.update({post['image_id']: image})
-                list_of_latlong.append(generate_latlong_from_address(post['location']))
-                list_of_titles.append(post['post_title'])
-                list_of_description.append(post['detailed_description'])
-                list_of_user_id.append(post['user_id'])
-                list_of_status.append(post['status'])
+        images = {}
+        list_of_themes = []
+        for post in posts:
+            if post['type'] not in list_of_themes:
                 list_of_themes.append(post['type'])
-                list_of_address.append(post['location'])
-                list_of_image_ids.append(image)                
-            data = {
-            'latlongvalues': list_of_latlong,
-            'title_values': list_of_titles,
-            'description_values': list_of_description,
-            'user_id_values': list_of_user_id,
-            'status_values': list_of_status,
-            'theme_values': list_of_themes,
-            'address_values': list_of_address,
-            'image_values': list_of_image_ids
+            image = fs.get(post['image_id'])
+            # print(type(image),image) 
+            base64_data = codecs.encode(image.read(), 'base64')
+            # print(type(base64_data),base64_data)
+            # sys.exit(1)
+            image = base64_data.decode('utf-8')
+            images.update({post['image_id']: image})
+            list_of_latlong.append(generate_latlong_from_address(post['location']))
+            list_of_titles.append(post['post_title'])
+            list_of_description.append(post['detailed_description'])
+            list_of_user_id.append(post['user_id'])
+            list_of_status.append(post['status'])
+            list_of_themes.append(post['type'])
+            list_of_address.append(post['location'])
+            list_of_images.append(image)                
+        data = {
+        'latlongvalues': list_of_latlong,
+        'title_values': list_of_titles,
+        'description_values': list_of_description,
+        'user_id_values': list_of_user_id,
+        'status_values': list_of_status,
+        'theme_values': list_of_themes,
+        'address_values': list_of_address,
+        'image_values': list_of_images
         }
-            return jsonify(data)
-            # return jsonify({'images': images,'list_of_themes_db': list_of_themes_db})
-        else:
-            posts = postings.find({"type": type_of_pet}).sort('date_posted', -1)
-            images = {}
-            for post in posts:
-                image = fs.get(post['image_id'])
-                base64_data = codecs.encode(image.read(), 'base64')
-                image = base64_data.decode('utf-8')
-                images.update({post['image_id']: image})
-                list_of_latlong.append(generate_latlong_from_address(post['location']))
-                list_of_titles.append(post['post_title'])
-                list_of_description.append(post['detailed_description'])
-                list_of_user_id.append(post['user_id'])
-                list_of_status.append(post['status'])
-                list_of_themes.append(post['type'])
-                list_of_address.append(post['location'])
-                list_of_image_ids.append(image)                
-            data = {
-            'latlongvalues': list_of_latlong,
-            'title_values': list_of_titles,
-            'description_values': list_of_description,
-            'user_id_values': list_of_user_id,
-            'status_values': list_of_status,
-            'theme_values': list_of_themes,
-            'address_values': list_of_address,
-            'image_values': list_of_image_ids
-        }
-            return jsonify(data)
+        return jsonify(data)
     else:
-        return jsonify("Log in First")
+        posts = postings.find({"type": type_of_pet}).sort('date_posted', -1)
+        images = {}
+        for post in posts:
+            image = fs.get(post['image_id'])
+            base64_data = codecs.encode(image.read(), 'base64')
+            # print(type(base64_data),base64_data)
+            # sys.exit(1)
+            image = base64_data.decode('utf-8')
+            images.update({post['image_id']: image})
+            list_of_latlong.append(generate_latlong_from_address(post['location']))
+            list_of_titles.append(post['post_title'])
+            list_of_description.append(post['detailed_description'])
+            list_of_user_id.append(post['user_id'])
+            list_of_status.append(post['status'])
+            list_of_themes.append(post['type'])
+            list_of_address.append(post['location'])
+            list_of_images.append(image)                
+        data = {
+            'latlongvalues': list_of_latlong,
+            'title_values': list_of_titles,
+            'description_values': list_of_description,
+            'user_id_values': list_of_user_id,
+            'status_values': list_of_status,
+            'theme_values': list_of_themes,
+            'address_values': list_of_address,
+            'image_values': list_of_images
+        }
+        return jsonify(data)
 
 @app.errorhandler(404)
 def page_not_found(e):

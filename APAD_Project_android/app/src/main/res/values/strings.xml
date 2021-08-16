@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">APAD_Project</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Submit</string>
+    <string name="Logout">Logout</string>
+    <string name="previous">Previous</string>
+    <string name="hello_first_fragment">Login</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string-array name="pets_array">
+        <item>Dog</item>
+        <item>Cat</item>
+        <item>Bird</item>
+        <item>Fish</item>
+        <item>Rodent</item>
+        <item>Reptile</item>
+        <item>Horse</item>
+        <item>Livestock</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="view_pets_array">
+        <item>All</item>
+        <item>Dog</item>
+        <item>Cat</item>
+        <item>Bird</item>
+        <item>Fish</item>
+        <item>Rodent</item>
+        <item>Reptile</item>
+        <item>Horse</item>
+        <item>Livestock</item>
+        <item>Other</item>
+    </string-array>
+</resources>

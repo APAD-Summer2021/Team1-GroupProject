@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/FirstFragment">
+
+    <fragment
+        android:id="@+id/FirstFragment"
+        android:name="com.example.apad_project.FirstFragment"
+        android:label="@string/first_fragment_label"
+        tools:layout="@layout/fragment_first">
+
+        <action
+            android:id="@+id/action_FirstFragment_to_SecondFragment"
+            app:destination="@id/SecondFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/SecondFragment"
+        android:name="com.example.apad_project.SecondFragment"
+        android:label="@string/second_fragment_label"
+        tools:layout="@layout/fragment_second">
+
+        <action
+            android:id="@+id/action_SecondFragment_to_FirstFragment"
+            app:destination="@id/FirstFragment" />
+        <action
+            android:id="@+id/action_SecondFragment_to_create_posts2"
+            app:destination="@id/create_posts2" />
+        <argument
+            android:name="myArg"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_SecondFragment_to_view_post"
+            app:destination="@id/view_post" />
+    </fragment>
+    <fragment
+        android:id="@+id/create_posts2"
+        android:name="com.example.apad_project.create_posts"
+        android:label="fragment_create_posts"
+        tools:layout="@layout/fragment_create_posts" >
+        <argument
+            android:name="myArg1"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_create_posts2_to_SecondFragment"
+            app:destination="@id/SecondFragment" />
+    </fragment>
+    <activity
+        android:id="@+id/view_post"
+        android:name="com.example.apad_project.view_post"
+        android:label="activity_view_post"
+        tools:layout="@layout/activity_view_post" />
+</navigation>
